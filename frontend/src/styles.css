@@ -1,36 +1,99 @@
-:root{--accent:#2b7cff}
-body{font-family:Inter,Segoe UI,Arial;margin:0;background:#f7f7fb;color:#111}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#fff;border-bottom:1px solid #eee}
-.navbar .brand{font-weight:600;color:var(--accent);text-decoration:none}
-.navbar .nav-right a{margin-left:16px;color:#333;text-decoration:none}
-.page-container{padding:20px}
-.page{max-width:1100px;margin:0 auto}
-.hero{display:flex;gap:24px;align-items:center;justify-content:space-between;padding:40px 0}
-.hero-image img{max-width:460px;border-radius:8px;box-shadow:0 6px 18px rgba(30,30,60,0.08)}
-.hero-cta{margin-top:16px}
-.btn{display:inline-block;padding:10px 16px;border-radius:6px;background:#f3f4f6;color:#222;text-decoration:none;margin-right:8px}
-.btn.primary{background:var(--accent);color:#fff}
-.features{display:flex;gap:12px;margin-top:20px}
-.feature{flex:1;background:#fff;padding:16px;border-radius:8px}
+:root{
+	--accent: #60a5fa;
+	--primary: #60a5fa;
+	--accent-2: #34d399;
+	--bg: #000000;
+	--surface: #0b0f14;
+	--muted: #9aa4b2;
+	--text: #e6eef8;
+}
+body.theme-light{
+	--accent: #0f62fe;
+	--primary: #0f62fe;
+	--accent-2: #00b894;
+	--bg: #f6f9fc;
+	--surface: #ffffff;
+	--muted: #6b7280;
+	--text: #0f1724;
+}
+*{box-sizing:border-box}
+body{font-family:Inter, "Segoe UI", Arial, sans-serif;margin:0;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:transparent;border-bottom:1px solid rgba(255,255,255,0.04);position:sticky;top:0;z-index:40}
+.navbar .brand{font-weight:700;color:var(--primary);text-decoration:none;font-size:18px}
+.nav-toggle{display:none;background:transparent;border:0;font-size:20px}
+.nav-right{display:flex;align-items:center;gap:18px}
+.nav-right a{color:var(--text);text-decoration:none;padding:8px 10px;border-radius:8px}
+.nav-right a:hover{background:rgba(96,165,250,0.08)}
+
+.page-container{padding:28px}
+.page{max-width:1200px;margin:0 auto}
+
+/* Global content alignment and gutters */
+.page{padding:18px 20px}
+.page, .panel, .feature, .dashboard-main, .dashboard-side {text-align:left}
+.page h2, .page h3, .page h4 {margin-top:0;margin-bottom:12px;text-align:left}
+
+
+.hero{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center;padding:40px 0}
+.hero-copy{padding-right:8px}
+.hero-copy h2{font-size:28px;margin:0 0 12px;text-align:left}
+.hero-copy p{color:var(--muted);margin:0;text-align:left}
+.hero-svg{border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+.hero-cta{margin-top:18px}
+
+.btn{display:inline-block;padding:10px 16px;border-radius:8px;background:#f3f4f6;color:#222;text-decoration:none;margin-right:8px}
+.btn.primary{background:var(--primary);color:#fff}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.feature{background:transparent;padding:18px;border-radius:10px}
+.feature h4{margin:0 0 8px;color:var(--text);text-align:left}
+.feature p{margin:0;color:var(--muted);text-align:left}
 
 .dashboard{display:flex;gap:16px}
 .dashboard-side{width:320px}
 .dashboard-main{flex:1}
-.panel{background:#fff;padding:12px;border-radius:6px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.dashboard-side .panel{position:sticky;top:84px}
+
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
 .before-after{display:flex;gap:12px}
-.pane{flex:1;background:#fff;padding:8px}
-.pane img{max-width:100%;height:auto;border-radius:4px}
-.placeholder{height:360px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:2px dashed #eee}
-.catalog-item{padding:8px;margin:6px 0;background:#fafafa;border-radius:4px;cursor:grab}
-.chip{width:36px;height:36px;border-radius:20px;border:0;margin:4px}
+.pane{flex:1;background:transparent;padding:12px}
+.pane img{max-width:100%;height:auto;border-radius:8px}
+.placeholder{height:360px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:2px dashed rgba(255,255,255,0.06);border-radius:8px}
+
+.catalog-item{padding:8px;margin:6px 0;background:transparent;border-radius:6px;cursor:grab;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.catalog-thumb{width:120px;height:60px;object-fit:contain;border-radius:6px;background:rgba(255,255,255,0.04);padding:6px;box-shadow:0 8px 20px rgba(0,0,0,0.6)}
+.catalog-row{display:flex;flex-direction:row;gap:12px;align-items:flex-start;margin-bottom:12px}
+.catalog-variants{display:flex;gap:8px}
+.thumb-label{font-weight:600;color:var(--text);margin-bottom:6px}
+.variant-label{font-size:12px;color:var(--muted);margin-top:6px}
+.chip{width:36px;height:36px;border-radius:20px;border:0;margin:4px;box-shadow:0 2px 6px rgba(9,30,66,0.06)}
+.items-scroll{display:flex;gap:10px;overflow:auto;padding-bottom:6px}
+
+.panel h3{margin:0 0 8px}
+
 .canvas-wrap{position:relative}
-canvas{border:1px solid #ddd}
+canvas{border-radius:8px;background:#050608;display:block;margin:0 auto}
 .canvas-actions{position:absolute;right:8px;bottom:8px}
+
+/* Ensure nav links and brand align nicely */
+.navbar .brand{display:inline-block}
+.nav-right{gap:14px}
+.nav-right a, .theme-toggle{vertical-align:middle}
+.canvas-controls{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.canvas-controls label{display:flex;align-items:center;gap:8px}
 
 /* Responsive */
 @media (max-width: 900px){
-	.hero{flex-direction:column}
+	.hero{grid-template-columns:1fr;gap:18px}
+	.hero-svg{width:100%;height:auto}
+	.features{grid-template-columns:1fr}
+	.nav-toggle{display:block}
+	.nav-right{position:fixed;right:12px;top:60px;background:var(--surface);padding:12px;border-radius:10px;flex-direction:column;gap:8px;box-shadow:0 12px 32px rgba(9,30,66,0.12);display:none}
+	.nav-right.open{display:flex}
 	.dashboard{flex-direction:column}
 	.dashboard-side{width:100%}
+	.items-scroll{gap:8px}
 }
+
 

@@ -20,7 +20,7 @@ export default function App(){
         <main className="page-container">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/dashboard" element={<Dashboard beforeImage={beforeImage} setBeforeImage={setBeforeImage} palette={palette} setPalette={setPalette} setTargetColor={setTargetColor} />} />
+            <Route path="/dashboard" element={<Dashboard beforeImage={beforeImage} setBeforeImage={setBeforeImage} palette={palette} setPalette={setPalette} targetColor={targetColor} setTargetColor={setTargetColor} />} />
             <Route path="/results" element={<Results beforeImage={beforeImage} targetColor={targetColor} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/about" element={<About />} />

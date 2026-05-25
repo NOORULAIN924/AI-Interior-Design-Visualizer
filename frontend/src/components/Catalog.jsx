@@ -1,28 +1,55 @@
 import React from 'react'
 
-function svgDataUrl(svg){
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
-}
-
+// Placeholder PNGs - replace with your own files in frontend/public/catalog/ if desired
 const sampleItems = [
-  {id:1, name:'Modern Sofa', src: svgDataUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='120'><rect x='10' y='50' width='220' height='50' rx='10' fill='%23c66' /><rect x='20' y='30' width='40' height='40' rx='6' fill='%23555' /><rect x='180' y='30' width='40' height='40' rx='6' fill='%23555' /></svg>`)},
-  {id:2, name:'Round Table', src: svgDataUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><ellipse cx='60' cy='50' rx='50' ry='30' fill='%23b87' /><rect x='55' y='50' width='10' height='50' fill='%23666' /></svg>`)},
-  {id:3, name:'Armchair', src: svgDataUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120'><rect x='10' y='40' width='140' height='60' rx='14' fill='%2388c' /><rect x='20' y='20' width='40' height='40' rx='8' fill='%23222' /></svg>`)},
+  {
+    id: 1,
+    name: 'Modern Sofa',
+    variants: [
+      {label: 'Blue Sofa', src: 'https://placehold.co/240x120/60a5fa/0b0f14.png?text=Sofa+Blue'},
+      {label: 'Warm Sofa', src: 'https://placehold.co/240x120/f97316/0b0f14.png?text=Sofa+Warm'}
+    ]
+  },
+  {
+    id: 2,
+    name: 'Round Table',
+    variants: [
+      {label: 'Oak Table', src: 'https://placehold.co/160x120/8b5e3c/ffffff.png?text=Table+Oak'},
+      {label: 'White Table', src: 'https://placehold.co/160x120/ffffff/0b0f14.png?text=Table+White'}
+    ]
+  },
+  {
+    id: 3,
+    name: 'Armchair',
+    variants: [
+      {label: 'Charcoal Chair', src: 'https://placehold.co/200x120/334155/ffffff.png?text=Chair+Charcoal'},
+      {label: 'Velvet Chair', src: 'https://placehold.co/200x120/7c3aed/ffffff.png?text=Chair+Velvet'}
+    ]
+  }
 ]
 
 export default function Catalog(){
-  function onDragStart(e,item){
+  function onDragStart(e, item){
     e.dataTransfer.setData('text/plain', JSON.stringify(item))
   }
 
   return (
     <div className="panel catalog">
       <h3>Furniture Catalog</h3>
-      <div className="items">
-        {sampleItems.map(it=> (
-          <div key={it.id} className="catalog-item" draggable onDragStart={(e)=>onDragStart(e,it)}>
-            <img src={it.src} alt={it.name} style={{width:80,height:40}} />
-            <div className="thumb">{it.name}</div>
+      <div className="items-scroll">
+        {sampleItems.map(it => (
+          <div key={it.id} className="catalog-row">
+            <div className="catalog-meta">
+              <div className="thumb-label">{it.name}</div>
+            </div>
+            <div className="catalog-variants">
+              {it.variants.map((v, idx) => (
+                <div key={idx} className={`catalog-item variant-${idx}`} draggable onDragStart={(e)=>onDragStart(e, {id: it.id, name: it.name, src: v.src})}>
+                  <img src={v.src} alt={v.label} className="catalog-thumb" onError={(ev)=>{ev.currentTarget.src='https://placehold.co/200x120/111827/ffffff.png?text=Missing'}} />
+                  <div className="variant-label">{v.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

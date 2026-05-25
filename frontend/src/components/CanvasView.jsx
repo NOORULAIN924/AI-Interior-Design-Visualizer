@@ -1,17 +1,31 @@
 import React, {useEffect, useRef, useState} from 'react'
 import { fabric } from 'fabric'
 
-export default function CanvasView({image}){
+export default function CanvasView({image, targetColor: propTargetColor, setTargetColor: propSetTargetColor}){
   const canvasRef = useRef(null)
   const fabricRef = useRef(null)
-  const [targetColor, setTargetColor] = useState('#dba')
+  const [targetColor, setTargetColor] = useState(propTargetColor || '#dba')
   const [picking, setPicking] = useState(false)
+
+  useEffect(()=>{
+    if(propTargetColor) setTargetColor(propTargetColor)
+  },[propTargetColor])
 
   useEffect(()=>{
     const c = new fabric.Canvas(canvasRef.current, {backgroundColor:'#fff', preserveObjectStacking:true})
     fabricRef.current = c
-    c.setHeight(540)
-    c.setWidth(720)
+    // responsive sizing: fit to container width with 4:3 ratio
+    function resize(){
+      const wrap = canvasRef.current.parentElement
+      const w = Math.min(960, wrap.clientWidth)
+      const h = Math.round(w * 0.75)
+      c.setWidth(w)
+      c.setHeight(h)
+      c.calcOffset()
+      c.requestRenderAll()
+    }
+    resize()
+    window.addEventListener('resize', resize)
 
     // accept drops from catalog
     const el = canvasRef.current
@@ -47,17 +61,30 @@ export default function CanvasView({image}){
       const bg = getBackgroundImage(c)
       if(!bg) return
       samplePixelFromFabricImage(bg, pointer.x, pointer.y).then(srcColor=>{
-        // perform recolor
-        applyColorReplaceToBackground(c, bg, srcColor, hexToRgb(targetColor))
+        // perform recolor (if mask present, use mask)
+        const maskObjects = c.getObjects().filter(o=>o.isMask)
+        if(maskObjects.length>0){
+          applyColorReplaceWithMask(c, bg, srcColor, hexToRgb(targetColor), maskObjects)
+        }else{
+          applyColorReplaceToBackground(c, bg, srcColor, hexToRgb(targetColor))
+        }
         setPicking(false)
       })
     }
+    // listen for free-draw paths to mark as mask objects
+    c.on('path:created', (e)=>{
+      const p = e.path
+      p.isMask = true
+      p.selectable = false
+      p.opacity = 0.9
+    })
     c.on('mouse:down', onCanvasClick)
 
     return ()=>{
       el.removeEventListener('drop', onDrop)
       el.removeEventListener('dragover', onDragOver)
       c.off('mouse:down', onCanvasClick)
+      window.removeEventListener('resize', resize)
       c.dispose()
     }
   },[picking, targetColor])
@@ -138,6 +165,65 @@ export default function CanvasView({image}){
     },{crossOrigin:'anonymous'})
   }
 
+  async function applyColorReplaceWithMask(c, fabricImg, sourceRgb, targetRgb, maskObjects){
+    // build offscreen mask canvas at image resolution
+    const imgEl = fabricImg.getElement()
+    const maskCanvas = document.createElement('canvas')
+    maskCanvas.width = imgEl.width
+    maskCanvas.height = imgEl.height
+    const mctx = maskCanvas.getContext('2d')
+    mctx.fillStyle = 'black'
+    mctx.fillRect(0,0,maskCanvas.width, maskCanvas.height)
+
+    // render each mask object onto the mask canvas by cloning and scaling
+    const tmp = new fabric.Canvas(document.createElement('canvas'))
+    tmp.setWidth(c.getWidth())
+    tmp.setHeight(c.getHeight())
+    for(const mo of maskObjects){
+      const clone = fabric.util.object.clone(mo)
+      // add to tmp and render
+      tmp.add(clone)
+    }
+    // use tmp toDataURL then draw into mask at image size
+    const maskDataUrl = tmp.toDataURL({format:'png'})
+    const maskImg = new Image()
+    await new Promise((res,rej)=>{maskImg.onload=res;maskImg.onerror=rej;maskImg.src=maskDataUrl})
+    // draw scaled to image size
+    mctx.drawImage(maskImg, 0,0, maskCanvas.width, maskCanvas.height)
+
+    // now apply recolor only where mask is non-black
+    const btmp = document.createElement('canvas')
+    btmp.width = imgEl.width; btmp.height = imgEl.height
+    const bctx = btmp.getContext('2d')
+    bctx.drawImage(imgEl,0,0)
+    const bdata = bctx.getImageData(0,0,btmp.width,btmp.height)
+    const mdata = mctx.getImageData(0,0,maskCanvas.width, maskCanvas.height).data
+    const threshold = 10
+    for(let i=0;i<bdata.data.length;i+=4){
+      const ma = mdata[i+3]
+      if(ma>threshold){
+        // pixel is within mask; apply replacement if close to sourceRgb
+        const r=bdata.data[i], g=bdata.data[i+1], b=bdata.data[i+2]
+        if(colorDistance2([r,g,b], sourceRgb) < 1800){
+          bdata.data[i] = Math.round((bdata.data[i]*0.2) + (targetRgb[0]*0.8))
+          bdata.data[i+1] = Math.round((bdata.data[i+1]*0.2) + (targetRgb[1]*0.8))
+          bdata.data[i+2] = Math.round((bdata.data[i+2]*0.2) + (targetRgb[2]*0.8))
+        }
+      }
+    }
+    bctx.putImageData(bdata,0,0)
+    const newDataUrl = btmp.toDataURL('image/png')
+    fabric.Image.fromURL(newDataUrl, img=>{
+      img.set({left:0,top:0,selectable:false})
+      img._isBackgroundImage = true
+      c.remove(fabricImg)
+      c.add(img)
+      img.sendToBack()
+      c.requestRenderAll()
+    },{crossOrigin:'anonymous'})
+    tmp.dispose()
+  }
+
   function exportImage(){
     const c = fabricRef.current
     const data = c.toDataURL({format:'png'})
@@ -145,6 +231,22 @@ export default function CanvasView({image}){
     a.href = data
     a.download = 'redesign.png'
     a.click()
+  }
+
+  function enableBrushMode(enable){
+    const c = fabricRef.current
+    c.isDrawingMode = !!enable
+    if(enable){
+      c.freeDrawingBrush.width = 18
+      c.freeDrawingBrush.color = 'white'
+    }
+  }
+
+  function clearMask(){
+    const c = fabricRef.current
+    const masks = c.getObjects().filter(o=>o.isMask)
+    masks.forEach(m=>c.remove(m))
+    c.requestRenderAll()
   }
 
   function copyShareCode(){
@@ -160,9 +262,12 @@ export default function CanvasView({image}){
 
   return (
     <div className="canvas-wrap">
-      <div style={{display:'flex',gap:8,marginBottom:8}}>
-        <label>Target color: <input type="color" value={targetColor} onChange={(e)=>setTargetColor(e.target.value)} /></label>
+      <div className="canvas-controls" style={{marginBottom:8}}>
+        <label>Target color: <input type="color" value={targetColor} onChange={(e)=>{setTargetColor(e.target.value); propSetTargetColor && propSetTargetColor(e.target.value)}} /></label>
         <button onClick={()=>setPicking(true)}>Pick area to recolor</button>
+        <button onClick={()=>{enableBrushMode(true); setTimeout(()=>enableBrushMode(true),50)}}>Brush Mask</button>
+        <label>Brush size: <input type="range" min="4" max="48" defaultValue={18} onChange={(e)=>{const c=fabricRef.current; if(c){c.freeDrawingBrush.width = parseInt(e.target.value,10)}}} /></label>
+        <button onClick={clearMask}>Clear Mask</button>
         <button onClick={exportImage}>Download PNG</button>
         <button onClick={copyShareCode}>Copy Share JSON</button>
       </div>

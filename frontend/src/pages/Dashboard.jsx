@@ -4,7 +4,7 @@ import ColorPickerPanel from '../components/ColorPickerPanel'
 import Catalog from '../components/Catalog'
 import CanvasView from '../components/CanvasView'
 
-export default function Dashboard({beforeImage, setBeforeImage, palette, setPalette, setTargetColor}){
+export default function Dashboard({beforeImage, setBeforeImage, palette, setPalette, targetColor, setTargetColor}){
   return (
     <div className="page dashboard">
       <aside className="dashboard-side">
@@ -14,7 +14,7 @@ export default function Dashboard({beforeImage, setBeforeImage, palette, setPale
       </aside>
       <section className="dashboard-main">
         <h3>Workspace</h3>
-        <CanvasView image={beforeImage} />
+        <CanvasView image={beforeImage} targetColor={targetColor} setTargetColor={setTargetColor} />
       </section>
     </div>
   )

@@ -39,16 +39,16 @@
   "frontendContracts": {
     "fabricLayers": [
       {
-        "area": 354830.0,
+        "area": 304003.0,
         "bbox": {
-          "height": 371,
+          "height": 318,
           "width": 960,
           "x": 0,
           "y": 0
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 0 0 L 0 370 L 959 370 L 959 0 Z",
+          "path": "M 0 0 L 0 317 L 959 317 L 959 0 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -61,30 +61,30 @@
           ],
           [
             0,
-            370
+            317
           ],
           [
             959,
-            370
+            317
           ],
           [
             959,
             0
           ]
         ],
-        "svgPath": "M 0 0 L 0 370 L 959 370 L 959 0 Z"
+        "svgPath": "M 0 0 L 0 317 L 959 317 L 959 0 Z"
       },
       {
-        "area": 257012.0,
+        "area": 220570.0,
         "bbox": {
-          "height": 269,
+          "height": 231,
           "width": 960,
           "x": 0,
-          "y": 371
+          "y": 318
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 0 371 L 0 639 L 959 639 L 959 371 Z",
+          "path": "M 0 318 L 0 548 L 959 548 L 959 318 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -93,34 +93,34 @@
         "polygon": [
           [
             0,
-            371
+            318
           ],
           [
             0,
-            639
+            548
           ],
           [
             959,
-            639
+            548
           ],
           [
             959,
-            371
+            318
           ]
         ],
-        "svgPath": "M 0 371 L 0 639 L 959 639 L 959 371 Z"
+        "svgPath": "M 0 318 L 0 548 L 959 548 L 959 318 Z"
       },
       {
-        "area": 111471.0,
+        "area": 176410.0,
         "bbox": {
-          "height": 220,
-          "width": 510,
-          "x": 170,
-          "y": 300
+          "height": 231,
+          "width": 768,
+          "x": 96,
+          "y": 252
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 170 300 L 170 519 L 679 519 L 679 300 Z",
+          "path": "M 96 252 L 96 482 L 863 482 L 863 252 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -128,35 +128,35 @@
         "id": "sofa-1",
         "polygon": [
           [
-            170,
-            300
+            96,
+            252
           ],
           [
-            170,
-            519
+            96,
+            482
           ],
           [
-            679,
-            519
+            863,
+            482
           ],
           [
-            679,
-            300
+            863,
+            252
           ]
         ],
-        "svgPath": "M 170 300 L 170 519 L 679 519 L 679 300 Z"
+        "svgPath": "M 96 252 L 96 482 L 863 482 L 863 252 Z"
       },
       {
-        "area": 37411.0,
+        "area": 28400.0,
         "bbox": {
-          "height": 180,
-          "width": 210,
-          "x": 500,
-          "y": 286
+          "height": 143,
+          "width": 201,
+          "x": 499,
+          "y": 252
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 500 286 L 500 465 L 709 465 L 709 286 Z",
+          "path": "M 499 252 L 499 394 L 699 394 L 699 252 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -164,35 +164,35 @@
         "id": "table-1",
         "polygon": [
           [
-            500,
-            286
+            499,
+            252
           ],
           [
-            500,
-            465
+            499,
+            394
           ],
           [
-            709,
-            465
+            699,
+            394
           ],
           [
-            709,
-            286
+            699,
+            252
           ]
         ],
-        "svgPath": "M 500 286 L 500 465 L 709 465 L 709 286 Z"
+        "svgPath": "M 499 252 L 499 394 L 699 394 L 699 252 Z"
       },
       {
-        "area": 13351.0,
+        "area": 13680.0,
         "bbox": {
-          "height": 170,
-          "width": 80,
-          "x": 690,
-          "y": 160
+          "height": 181,
+          "width": 77,
+          "x": 691,
+          "y": 137
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 690 160 L 690 329 L 769 329 L 769 160 Z",
+          "path": "M 691 137 L 691 317 L 767 317 L 767 137 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -200,35 +200,35 @@
         "id": "lamp-1",
         "polygon": [
           [
-            690,
-            160
+            691,
+            137
           ],
           [
-            690,
-            329
+            691,
+            317
           ],
           [
-            769,
-            329
+            767,
+            317
           ],
           [
-            769,
-            160
+            767,
+            137
           ]
         ],
-        "svgPath": "M 690 160 L 690 329 L 769 329 L 769 160 Z"
+        "svgPath": "M 691 137 L 691 317 L 767 317 L 767 137 Z"
       },
       {
-        "area": 53818.0,
+        "area": 41268.0,
         "bbox": {
-          "height": 380,
-          "width": 143,
-          "x": 745,
-          "y": 140
+          "height": 363,
+          "width": 115,
+          "x": 768,
+          "y": 109
         },
         "fabricPathConfig": {
           "fill": "rgba(255, 255, 255, 0.16)",
-          "path": "M 745 140 L 745 519 L 887 519 L 887 140 Z",
+          "path": "M 768 109 L 768 471 L 882 471 L 882 109 Z",
           "stroke": "#ea580c",
           "strokeUniform": true,
           "strokeWidth": 2
@@ -236,23 +236,23 @@
         "id": "plant-1",
         "polygon": [
           [
-            745,
-            140
+            768,
+            109
           ],
           [
-            745,
-            519
+            768,
+            471
           ],
           [
-            887,
-            519
+            882,
+            471
           ],
           [
-            887,
-            140
+            882,
+            109
           ]
         ],
-        "svgPath": "M 745 140 L 745 519 L 887 519 L 887 140 Z"
+        "svgPath": "M 768 109 L 768 471 L 882 471 L 882 109 Z"
       }
     ],
     "shareableSummary": {
@@ -286,19 +286,20 @@
           "style": "statement"
         }
       ],
+      "implementationNote": "This notebook is a prototype: segmentation is partial or fallback-based, palette extraction is real, and furniture replacement is simulated with presets and tinting rather than generative synthesis.",
       "styleTheme": "japandi",
       "vectorLayers": [
         {
-          "area": 354830.0,
+          "area": 304003.0,
           "bbox": {
-            "height": 371,
+            "height": 318,
             "width": 960,
             "x": 0,
             "y": 0
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 0 0 L 0 370 L 959 370 L 959 0 Z",
+            "path": "M 0 0 L 0 317 L 959 317 L 959 0 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -311,30 +312,30 @@
             ],
             [
               0,
-              370
+              317
             ],
             [
               959,
-              370
+              317
             ],
             [
               959,
               0
             ]
           ],
-          "svgPath": "M 0 0 L 0 370 L 959 370 L 959 0 Z"
+          "svgPath": "M 0 0 L 0 317 L 959 317 L 959 0 Z"
         },
         {
-          "area": 257012.0,
+          "area": 220570.0,
           "bbox": {
-            "height": 269,
+            "height": 231,
             "width": 960,
             "x": 0,
-            "y": 371
+            "y": 318
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 0 371 L 0 639 L 959 639 L 959 371 Z",
+            "path": "M 0 318 L 0 548 L 959 548 L 959 318 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -343,34 +344,34 @@
           "polygon": [
             [
               0,
-              371
+              318
             ],
             [
               0,
-              639
+              548
             ],
             [
               959,
-              639
+              548
             ],
             [
               959,
-              371
+              318
             ]
           ],
-          "svgPath": "M 0 371 L 0 639 L 959 639 L 959 371 Z"
+          "svgPath": "M 0 318 L 0 548 L 959 548 L 959 318 Z"
         },
         {
-          "area": 111471.0,
+          "area": 176410.0,
           "bbox": {
-            "height": 220,
-            "width": 510,
-            "x": 170,
-            "y": 300
+            "height": 231,
+            "width": 768,
+            "x": 96,
+            "y": 252
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 170 300 L 170 519 L 679 519 L 679 300 Z",
+            "path": "M 96 252 L 96 482 L 863 482 L 863 252 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -378,35 +379,35 @@
           "id": "sofa-1",
           "polygon": [
             [
-              170,
-              300
+              96,
+              252
             ],
             [
-              170,
-              519
+              96,
+              482
             ],
             [
-              679,
-              519
+              863,
+              482
             ],
             [
-              679,
-              300
+              863,
+              252
             ]
           ],
-          "svgPath": "M 170 300 L 170 519 L 679 519 L 679 300 Z"
+          "svgPath": "M 96 252 L 96 482 L 863 482 L 863 252 Z"
         },
         {
-          "area": 37411.0,
+          "area": 28400.0,
           "bbox": {
-            "height": 180,
-            "width": 210,
-            "x": 500,
-            "y": 286
+            "height": 143,
+            "width": 201,
+            "x": 499,
+            "y": 252
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 500 286 L 500 465 L 709 465 L 709 286 Z",
+            "path": "M 499 252 L 499 394 L 699 394 L 699 252 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -414,35 +415,35 @@
           "id": "table-1",
           "polygon": [
             [
-              500,
-              286
+              499,
+              252
             ],
             [
-              500,
-              465
+              499,
+              394
             ],
             [
-              709,
-              465
+              699,
+              394
             ],
             [
-              709,
-              286
+              699,
+              252
             ]
           ],
-          "svgPath": "M 500 286 L 500 465 L 709 465 L 709 286 Z"
+          "svgPath": "M 499 252 L 499 394 L 699 394 L 699 252 Z"
         },
         {
-          "area": 13351.0,
+          "area": 13680.0,
           "bbox": {
-            "height": 170,
-            "width": 80,
-            "x": 690,
-            "y": 160
+            "height": 181,
+            "width": 77,
+            "x": 691,
+            "y": 137
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 690 160 L 690 329 L 769 329 L 769 160 Z",
+            "path": "M 691 137 L 691 317 L 767 317 L 767 137 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -450,35 +451,35 @@
           "id": "lamp-1",
           "polygon": [
             [
-              690,
-              160
+              691,
+              137
             ],
             [
-              690,
-              329
+              691,
+              317
             ],
             [
-              769,
-              329
+              767,
+              317
             ],
             [
-              769,
-              160
+              767,
+              137
             ]
           ],
-          "svgPath": "M 690 160 L 690 329 L 769 329 L 769 160 Z"
+          "svgPath": "M 691 137 L 691 317 L 767 317 L 767 137 Z"
         },
         {
-          "area": 53818.0,
+          "area": 41268.0,
           "bbox": {
-            "height": 380,
-            "width": 143,
-            "x": 745,
-            "y": 140
+            "height": 363,
+            "width": 115,
+            "x": 768,
+            "y": 109
           },
           "fabricPathConfig": {
             "fill": "rgba(255, 255, 255, 0.16)",
-            "path": "M 745 140 L 745 519 L 887 519 L 887 140 Z",
+            "path": "M 768 109 L 768 471 L 882 471 L 882 109 Z",
             "stroke": "#ea580c",
             "strokeUniform": true,
             "strokeWidth": 2
@@ -486,52 +487,73 @@
           "id": "plant-1",
           "polygon": [
             [
-              745,
-              140
+              768,
+              109
             ],
             [
-              745,
-              519
+              768,
+              471
             ],
             [
-              887,
-              519
+              882,
+              471
             ],
             [
-              887,
-              140
+              882,
+              109
             ]
           ],
-          "svgPath": "M 745 140 L 745 519 L 887 519 L 887 140 Z"
+          "svgPath": "M 768 109 L 768 471 L 882 471 L 882 109 Z"
         }
       ],
       "wallPalette": {
-        "accent": "#686c75",
+        "accent": "#1f2c29",
         "name": "Warm Minimal",
         "trim": "#ffffff",
-        "wall": "#ede9e3"
+        "wall": "#69a1a6"
       }
     }
   },
+  "metrics": {
+    "coverage": {
+      "floor": 0.4208,
+      "lamp": 0.0264,
+      "plant": 0.0792,
+      "sofa": 0.3366,
+      "table": 0.0545,
+      "wall": 0.5792
+    },
+    "furnitureDeltaMeanAbs": 73.1,
+    "perRegionIoU": {
+      "floor": 0.9545,
+      "lamp": 0.1848,
+      "plant": 0.3239,
+      "sofa": 0.4209,
+      "table": 0.0077,
+      "wall": 0.9654
+    },
+    "proxySegmentationAccuracy": 0.4762,
+    "wallDeltaMeanAbs": 58.94
+  },
   "palette": {
     "activeChoice": {
-      "accent": "#686c75",
+      "accent": "#1f2c29",
       "name": "Warm Minimal",
       "trim": "#ffffff",
-      "wall": "#ede9e3"
+      "wall": "#69a1a6"
     },
     "recommendations": [
       {
-        "accent": "#686c75",
+        "accent": "#1f2c29",
         "name": "Warm Minimal",
         "trim": "#ffffff",
-        "wall": "#ede9e3"
+        "wall": "#69a1a6"
       },
       {
-        "accent": "#ede9e3",
+        "accent": "#69a1a6",
         "name": "Soft Contrast",
         "trim": "#f8f3ef",
-        "wall": "#c0a991"
+        "wall": "#9cc8d1"
       },
       {
         "accent": "#8ea3a0",
@@ -541,124 +563,136 @@
       }
     ],
     "roomPalette": {
-      "kmeansCompactness": 137806977.20731163,
-      "regionPixelCount": 614400,
+      "kmeansCompactness": 798325932.1636932,
+      "regionPixelCount": 527040,
       "roles": {
         "accent": {
           "swatch": {
-            "hex": "#686c75",
+            "hex": "#1f2c29",
             "rank": 2,
             "rgb": [
-              104,
-              108,
-              117
+              31,
+              44,
+              41
             ],
-            "share": 0.1346
+            "share": 0.2507
           },
           "weight": 10
         },
         "dominant": {
           "swatch": {
-            "hex": "#ede9e3",
+            "hex": "#69a1a6",
             "rank": 0,
             "rgb": [
-              237,
-              233,
-              227
+              105,
+              161,
+              166
             ],
-            "share": 0.5046
+            "share": 0.3225
           },
           "weight": 60
         },
         "secondary": {
           "swatch": {
-            "hex": "#c0a991",
+            "hex": "#9cc8d1",
             "rank": 1,
             "rgb": [
-              192,
-              169,
-              145
+              156,
+              200,
+              209
             ],
-            "share": 0.2709
+            "share": 0.2884
           },
           "weight": 30
         }
       },
       "swatches": [
         {
-          "hex": "#ede9e3",
+          "hex": "#69a1a6",
           "rank": 0,
           "rgb": [
-            237,
-            233,
-            227
+            105,
+            161,
+            166
           ],
-          "share": 0.5046
+          "share": 0.3225
         },
         {
-          "hex": "#c0a991",
+          "hex": "#9cc8d1",
           "rank": 1,
           "rgb": [
-            192,
-            169,
-            145
+            156,
+            200,
+            209
           ],
-          "share": 0.2709
+          "share": 0.2884
         },
         {
-          "hex": "#686c75",
+          "hex": "#1f2c29",
           "rank": 2,
           "rgb": [
-            104,
-            108,
-            117
+            31,
+            44,
+            41
           ],
-          "share": 0.1346
+          "share": 0.2507
         },
         {
-          "hex": "#d5cbbe",
+          "hex": "#637358",
           "rank": 3,
           "rgb": [
-            213,
-            203,
-            190
+            99,
+            115,
+            88
           ],
-          "share": 0.0899
+          "share": 0.1385
         }
       ]
     }
   },
   "regions": {
     "floor": {
-      "pixelCount": 258240,
+      "coverage": 0.4208,
+      "pixelCount": 221760,
+      "proxyIoU": 0.9545,
       "vectorLayerCount": 1
     },
     "lamp": {
-      "pixelCount": 13600,
+      "coverage": 0.0264,
+      "pixelCount": 13937,
+      "proxyIoU": 0.1848,
       "vectorLayerCount": 1
     },
     "plant": {
-      "pixelCount": 54340,
+      "coverage": 0.0792,
+      "pixelCount": 41745,
+      "proxyIoU": 0.3239,
       "vectorLayerCount": 1
     },
     "sofa": {
-      "pixelCount": 112200,
+      "coverage": 0.3366,
+      "pixelCount": 177408,
+      "proxyIoU": 0.4209,
       "vectorLayerCount": 1
     },
     "table": {
-      "pixelCount": 37800,
+      "coverage": 0.0545,
+      "pixelCount": 28743,
+      "proxyIoU": 0.0077,
       "vectorLayerCount": 1
     },
     "wall": {
-      "pixelCount": 356160,
+      "coverage": 0.5792,
+      "pixelCount": 305280,
+      "proxyIoU": 0.9654,
       "vectorLayerCount": 1
     }
   },
   "source": {
     "imageSize": {
-      "height": 640,
+      "height": 549,
       "width": 960
     },
-    "imageSource": "synthetic_demo"
+    "imageSource": "TestRoo.png"
   }
 }

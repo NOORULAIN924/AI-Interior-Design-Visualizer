@@ -1,0 +1,697 @@
+{
+  "design": {
+    "beforeAfter": {
+      "afterLabel": "After - japandi",
+      "beforeLabel": "Original"
+    },
+    "catalog": [
+      {
+        "category": "sofa",
+        "id": "sofa-midcentury",
+        "label": "Mid-century sofa",
+        "previewColor": "#7b6d62",
+        "style": "warm modern"
+      },
+      {
+        "category": "chair",
+        "id": "chair-scandi",
+        "label": "Scandinavian lounge chair",
+        "previewColor": "#d9d2c7",
+        "style": "airy minimal"
+      },
+      {
+        "category": "table",
+        "id": "table-wood",
+        "label": "Oak coffee table",
+        "previewColor": "#c8a47d",
+        "style": "natural"
+      },
+      {
+        "category": "lamp",
+        "id": "lamp-arc",
+        "label": "Arc floor lamp",
+        "previewColor": "#b88a5a",
+        "style": "statement"
+      }
+    ],
+    "styleTheme": "japandi"
+  },
+  "frontendContracts": {
+    "fabricLayers": [
+      {
+        "area": 304003.0,
+        "bbox": {
+          "height": 318,
+          "width": 960,
+          "x": 0,
+          "y": 0
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 0 0 L 0 317 L 959 317 L 959 0 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "wall-1",
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            317
+          ],
+          [
+            959,
+            317
+          ],
+          [
+            959,
+            0
+          ]
+        ],
+        "svgPath": "M 0 0 L 0 317 L 959 317 L 959 0 Z"
+      },
+      {
+        "area": 220570.0,
+        "bbox": {
+          "height": 231,
+          "width": 960,
+          "x": 0,
+          "y": 318
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 0 318 L 0 548 L 959 548 L 959 318 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "floor-1",
+        "polygon": [
+          [
+            0,
+            318
+          ],
+          [
+            0,
+            548
+          ],
+          [
+            959,
+            548
+          ],
+          [
+            959,
+            318
+          ]
+        ],
+        "svgPath": "M 0 318 L 0 548 L 959 548 L 959 318 Z"
+      },
+      {
+        "area": 176410.0,
+        "bbox": {
+          "height": 231,
+          "width": 768,
+          "x": 96,
+          "y": 252
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 96 252 L 96 482 L 863 482 L 863 252 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-1",
+        "polygon": [
+          [
+            96,
+            252
+          ],
+          [
+            96,
+            482
+          ],
+          [
+            863,
+            482
+          ],
+          [
+            863,
+            252
+          ]
+        ],
+        "svgPath": "M 96 252 L 96 482 L 863 482 L 863 252 Z"
+      },
+      {
+        "area": 28400.0,
+        "bbox": {
+          "height": 143,
+          "width": 201,
+          "x": 499,
+          "y": 252
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 499 252 L 499 394 L 699 394 L 699 252 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "table-1",
+        "polygon": [
+          [
+            499,
+            252
+          ],
+          [
+            499,
+            394
+          ],
+          [
+            699,
+            394
+          ],
+          [
+            699,
+            252
+          ]
+        ],
+        "svgPath": "M 499 252 L 499 394 L 699 394 L 699 252 Z"
+      },
+      {
+        "area": 13680.0,
+        "bbox": {
+          "height": 181,
+          "width": 77,
+          "x": 691,
+          "y": 137
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 691 137 L 691 317 L 767 317 L 767 137 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "lamp-1",
+        "polygon": [
+          [
+            691,
+            137
+          ],
+          [
+            691,
+            317
+          ],
+          [
+            767,
+            317
+          ],
+          [
+            767,
+            137
+          ]
+        ],
+        "svgPath": "M 691 137 L 691 317 L 767 317 L 767 137 Z"
+      },
+      {
+        "area": 41268.0,
+        "bbox": {
+          "height": 363,
+          "width": 115,
+          "x": 768,
+          "y": 109
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 768 109 L 768 471 L 882 471 L 882 109 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "plant-1",
+        "polygon": [
+          [
+            768,
+            109
+          ],
+          [
+            768,
+            471
+          ],
+          [
+            882,
+            471
+          ],
+          [
+            882,
+            109
+          ]
+        ],
+        "svgPath": "M 768 109 L 768 471 L 882 471 L 882 109 Z"
+      }
+    ],
+    "shareableSummary": {
+      "catalogItems": [
+        {
+          "category": "sofa",
+          "id": "sofa-midcentury",
+          "label": "Mid-century sofa",
+          "previewColor": "#7b6d62",
+          "style": "warm modern"
+        },
+        {
+          "category": "chair",
+          "id": "chair-scandi",
+          "label": "Scandinavian lounge chair",
+          "previewColor": "#d9d2c7",
+          "style": "airy minimal"
+        },
+        {
+          "category": "table",
+          "id": "table-wood",
+          "label": "Oak coffee table",
+          "previewColor": "#c8a47d",
+          "style": "natural"
+        },
+        {
+          "category": "lamp",
+          "id": "lamp-arc",
+          "label": "Arc floor lamp",
+          "previewColor": "#b88a5a",
+          "style": "statement"
+        }
+      ],
+      "styleTheme": "japandi",
+      "vectorLayers": [
+        {
+          "area": 304003.0,
+          "bbox": {
+            "height": 318,
+            "width": 960,
+            "x": 0,
+            "y": 0
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 0 0 L 0 317 L 959 317 L 959 0 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "wall-1",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              317
+            ],
+            [
+              959,
+              317
+            ],
+            [
+              959,
+              0
+            ]
+          ],
+          "svgPath": "M 0 0 L 0 317 L 959 317 L 959 0 Z"
+        },
+        {
+          "area": 220570.0,
+          "bbox": {
+            "height": 231,
+            "width": 960,
+            "x": 0,
+            "y": 318
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 0 318 L 0 548 L 959 548 L 959 318 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "floor-1",
+          "polygon": [
+            [
+              0,
+              318
+            ],
+            [
+              0,
+              548
+            ],
+            [
+              959,
+              548
+            ],
+            [
+              959,
+              318
+            ]
+          ],
+          "svgPath": "M 0 318 L 0 548 L 959 548 L 959 318 Z"
+        },
+        {
+          "area": 176410.0,
+          "bbox": {
+            "height": 231,
+            "width": 768,
+            "x": 96,
+            "y": 252
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 96 252 L 96 482 L 863 482 L 863 252 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-1",
+          "polygon": [
+            [
+              96,
+              252
+            ],
+            [
+              96,
+              482
+            ],
+            [
+              863,
+              482
+            ],
+            [
+              863,
+              252
+            ]
+          ],
+          "svgPath": "M 96 252 L 96 482 L 863 482 L 863 252 Z"
+        },
+        {
+          "area": 28400.0,
+          "bbox": {
+            "height": 143,
+            "width": 201,
+            "x": 499,
+            "y": 252
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 499 252 L 499 394 L 699 394 L 699 252 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "table-1",
+          "polygon": [
+            [
+              499,
+              252
+            ],
+            [
+              499,
+              394
+            ],
+            [
+              699,
+              394
+            ],
+            [
+              699,
+              252
+            ]
+          ],
+          "svgPath": "M 499 252 L 499 394 L 699 394 L 699 252 Z"
+        },
+        {
+          "area": 13680.0,
+          "bbox": {
+            "height": 181,
+            "width": 77,
+            "x": 691,
+            "y": 137
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 691 137 L 691 317 L 767 317 L 767 137 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "lamp-1",
+          "polygon": [
+            [
+              691,
+              137
+            ],
+            [
+              691,
+              317
+            ],
+            [
+              767,
+              317
+            ],
+            [
+              767,
+              137
+            ]
+          ],
+          "svgPath": "M 691 137 L 691 317 L 767 317 L 767 137 Z"
+        },
+        {
+          "area": 41268.0,
+          "bbox": {
+            "height": 363,
+            "width": 115,
+            "x": 768,
+            "y": 109
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 768 109 L 768 471 L 882 471 L 882 109 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "plant-1",
+          "polygon": [
+            [
+              768,
+              109
+            ],
+            [
+              768,
+              471
+            ],
+            [
+              882,
+              471
+            ],
+            [
+              882,
+              109
+            ]
+          ],
+          "svgPath": "M 768 109 L 768 471 L 882 471 L 882 109 Z"
+        }
+      ],
+      "wallPalette": {
+        "accent": "#1f2c29",
+        "name": "Warm Minimal",
+        "trim": "#ffffff",
+        "wall": "#69a1a6"
+      }
+    }
+  },
+  "metrics": {
+    "coverage": {
+      "floor": 0.4208,
+      "lamp": 0.0264,
+      "plant": 0.0792,
+      "sofa": 0.3366,
+      "table": 0.0545,
+      "wall": 0.5792
+    },
+    "furnitureDeltaMeanAbs": 73.1,
+    "perRegionIoU": {
+      "floor": 0.9545,
+      "lamp": 0.1848,
+      "plant": 0.3239,
+      "sofa": 0.4209,
+      "table": 0.0077,
+      "wall": 0.9654
+    },
+    "proxySegmentationAccuracy": 0.4762,
+    "wallDeltaMeanAbs": 58.94
+  },
+  "palette": {
+    "activeChoice": {
+      "accent": "#1f2c29",
+      "name": "Warm Minimal",
+      "trim": "#ffffff",
+      "wall": "#69a1a6"
+    },
+    "recommendations": [
+      {
+        "accent": "#1f2c29",
+        "name": "Warm Minimal",
+        "trim": "#ffffff",
+        "wall": "#69a1a6"
+      },
+      {
+        "accent": "#69a1a6",
+        "name": "Soft Contrast",
+        "trim": "#f8f3ef",
+        "wall": "#9cc8d1"
+      },
+      {
+        "accent": "#8ea3a0",
+        "name": "Calm Studio",
+        "trim": "#f4f1ed",
+        "wall": "#e8dfd5"
+      }
+    ],
+    "roomPalette": {
+      "kmeansCompactness": 798325932.1636932,
+      "regionPixelCount": 527040,
+      "roles": {
+        "accent": {
+          "swatch": {
+            "hex": "#1f2c29",
+            "rank": 2,
+            "rgb": [
+              31,
+              44,
+              41
+            ],
+            "share": 0.2507
+          },
+          "weight": 10
+        },
+        "dominant": {
+          "swatch": {
+            "hex": "#69a1a6",
+            "rank": 0,
+            "rgb": [
+              105,
+              161,
+              166
+            ],
+            "share": 0.3225
+          },
+          "weight": 60
+        },
+        "secondary": {
+          "swatch": {
+            "hex": "#9cc8d1",
+            "rank": 1,
+            "rgb": [
+              156,
+              200,
+              209
+            ],
+            "share": 0.2884
+          },
+          "weight": 30
+        }
+      },
+      "swatches": [
+        {
+          "hex": "#69a1a6",
+          "rank": 0,
+          "rgb": [
+            105,
+            161,
+            166
+          ],
+          "share": 0.3225
+        },
+        {
+          "hex": "#9cc8d1",
+          "rank": 1,
+          "rgb": [
+            156,
+            200,
+            209
+          ],
+          "share": 0.2884
+        },
+        {
+          "hex": "#1f2c29",
+          "rank": 2,
+          "rgb": [
+            31,
+            44,
+            41
+          ],
+          "share": 0.2507
+        },
+        {
+          "hex": "#637358",
+          "rank": 3,
+          "rgb": [
+            99,
+            115,
+            88
+          ],
+          "share": 0.1385
+        }
+      ]
+    }
+  },
+  "regions": {
+    "floor": {
+      "coverage": 0.4208,
+      "pixelCount": 221760,
+      "proxyIoU": 0.9545,
+      "vectorLayerCount": 1
+    },
+    "lamp": {
+      "coverage": 0.0264,
+      "pixelCount": 13937,
+      "proxyIoU": 0.1848,
+      "vectorLayerCount": 1
+    },
+    "plant": {
+      "coverage": 0.0792,
+      "pixelCount": 41745,
+      "proxyIoU": 0.3239,
+      "vectorLayerCount": 1
+    },
+    "sofa": {
+      "coverage": 0.3366,
+      "pixelCount": 177408,
+      "proxyIoU": 0.4209,
+      "vectorLayerCount": 1
+    },
+    "table": {
+      "coverage": 0.0545,
+      "pixelCount": 28743,
+      "proxyIoU": 0.0077,
+      "vectorLayerCount": 1
+    },
+    "wall": {
+      "coverage": 0.5792,
+      "pixelCount": 305280,
+      "proxyIoU": 0.9654,
+      "vectorLayerCount": 1
+    }
+  },
+  "source": {
+    "imageSize": {
+      "height": 549,
+      "width": 960
+    },
+    "imageSource": "TestRoo.png"
+  }
+}

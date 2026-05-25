@@ -1,0 +1,1658 @@
+{
+  "design": {
+    "beforeAfter": {
+      "afterLabel": "After - japandi",
+      "beforeLabel": "Original"
+    },
+    "catalog": [
+      {
+        "category": "sofa",
+        "id": "sofa-midcentury",
+        "label": "Mid-century sofa",
+        "previewColor": "#7b6d62",
+        "style": "warm modern"
+      },
+      {
+        "category": "chair",
+        "id": "chair-scandi",
+        "label": "Scandinavian lounge chair",
+        "previewColor": "#d9d2c7",
+        "style": "airy minimal"
+      },
+      {
+        "category": "table",
+        "id": "table-wood",
+        "label": "Oak coffee table",
+        "previewColor": "#c8a47d",
+        "style": "natural"
+      },
+      {
+        "category": "lamp",
+        "id": "lamp-arc",
+        "label": "Arc floor lamp",
+        "previewColor": "#b88a5a",
+        "style": "statement"
+      }
+    ],
+    "styleTheme": "japandi"
+  },
+  "frontendContracts": {
+    "fabricLayers": [
+      {
+        "area": 32042.5,
+        "bbox": {
+          "height": 90,
+          "width": 656,
+          "x": 62,
+          "y": 0
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 62 4 L 401 89 L 717 0 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "wall-10",
+        "polygon": [
+          [
+            62,
+            4
+          ],
+          [
+            401,
+            89
+          ],
+          [
+            717,
+            0
+          ]
+        ],
+        "svgPath": "M 62 4 L 401 89 L 717 0 Z"
+      },
+      {
+        "area": 12519.0,
+        "bbox": {
+          "height": 207,
+          "width": 71,
+          "x": 292,
+          "y": 276
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 358 276 L 318 294 L 292 333 L 299 406 L 295 482 L 338 482 L 362 463 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "floor-15",
+        "polygon": [
+          [
+            358,
+            276
+          ],
+          [
+            318,
+            294
+          ],
+          [
+            292,
+            333
+          ],
+          [
+            299,
+            406
+          ],
+          [
+            295,
+            482
+          ],
+          [
+            338,
+            482
+          ],
+          [
+            362,
+            463
+          ]
+        ],
+        "svgPath": "M 358 276 L 318 294 L 292 333 L 299 406 L 295 482 L 338 482 L 362 463 Z"
+      },
+      {
+        "area": 21023.0,
+        "bbox": {
+          "height": 188,
+          "width": 178,
+          "x": 365,
+          "y": 273
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 536 301 L 522 294 L 519 352 L 515 292 L 494 288 L 491 322 L 489 287 L 420 273 L 419 407 L 414 275 L 366 274 L 365 460 L 414 431 L 419 408 L 423 425 L 542 349 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "floor-16",
+        "polygon": [
+          [
+            536,
+            301
+          ],
+          [
+            522,
+            294
+          ],
+          [
+            519,
+            352
+          ],
+          [
+            515,
+            292
+          ],
+          [
+            494,
+            288
+          ],
+          [
+            491,
+            322
+          ],
+          [
+            489,
+            287
+          ],
+          [
+            420,
+            273
+          ],
+          [
+            419,
+            407
+          ],
+          [
+            414,
+            275
+          ],
+          [
+            366,
+            274
+          ],
+          [
+            365,
+            460
+          ],
+          [
+            414,
+            431
+          ],
+          [
+            419,
+            408
+          ],
+          [
+            423,
+            425
+          ],
+          [
+            542,
+            349
+          ]
+        ],
+        "svgPath": "M 536 301 L 522 294 L 519 352 L 515 292 L 494 288 L 491 322 L 489 287 L 420 273 L 419 407 L 414 275 L 366 274 L 365 460 L 414 431 L 419 408 L 423 425 L 542 349 Z"
+      },
+      {
+        "area": 24861.5,
+        "bbox": {
+          "height": 217,
+          "width": 249,
+          "x": 113,
+          "y": 266
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 361 266 L 157 293 L 113 324 L 113 342 L 235 481 L 279 482 L 274 407 L 287 319 L 313 288 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "floor-17",
+        "polygon": [
+          [
+            361,
+            266
+          ],
+          [
+            157,
+            293
+          ],
+          [
+            113,
+            324
+          ],
+          [
+            113,
+            342
+          ],
+          [
+            235,
+            481
+          ],
+          [
+            279,
+            482
+          ],
+          [
+            274,
+            407
+          ],
+          [
+            287,
+            319
+          ],
+          [
+            313,
+            288
+          ]
+        ],
+        "svgPath": "M 361 266 L 157 293 L 113 324 L 113 342 L 235 481 L 279 482 L 274 407 L 287 319 L 313 288 Z"
+      },
+      {
+        "area": 145.0,
+        "bbox": {
+          "height": 8,
+          "width": 27,
+          "x": 173,
+          "y": 241
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 199 241 L 175 244 L 173 248 L 198 248 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "floor-24",
+        "polygon": [
+          [
+            199,
+            241
+          ],
+          [
+            175,
+            244
+          ],
+          [
+            173,
+            248
+          ],
+          [
+            198,
+            248
+          ]
+        ],
+        "svgPath": "M 199 241 L 175 244 L 173 248 L 198 248 Z"
+      },
+      {
+        "area": 6556.5,
+        "bbox": {
+          "height": 113,
+          "width": 94,
+          "x": 461,
+          "y": 284
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 461 284 L 461 396 L 519 355 L 536 352 L 539 374 L 541 350 L 554 338 L 537 302 L 522 294 L 519 353 L 517 295 L 494 289 L 491 349 L 489 289 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-1",
+        "polygon": [
+          [
+            461,
+            284
+          ],
+          [
+            461,
+            396
+          ],
+          [
+            519,
+            355
+          ],
+          [
+            536,
+            352
+          ],
+          [
+            539,
+            374
+          ],
+          [
+            541,
+            350
+          ],
+          [
+            554,
+            338
+          ],
+          [
+            537,
+            302
+          ],
+          [
+            522,
+            294
+          ],
+          [
+            519,
+            353
+          ],
+          [
+            517,
+            295
+          ],
+          [
+            494,
+            289
+          ],
+          [
+            491,
+            349
+          ],
+          [
+            489,
+            289
+          ]
+        ],
+        "svgPath": "M 461 284 L 461 396 L 519 355 L 536 352 L 539 374 L 541 350 L 554 338 L 537 302 L 522 294 L 519 353 L 517 295 L 494 289 L 491 349 L 489 289 Z"
+      },
+      {
+        "area": 12172.5,
+        "bbox": {
+          "height": 204,
+          "width": 69,
+          "x": 293,
+          "y": 279
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 357 279 L 317 296 L 293 332 L 299 482 L 337 482 L 361 464 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-2",
+        "polygon": [
+          [
+            357,
+            279
+          ],
+          [
+            317,
+            296
+          ],
+          [
+            293,
+            332
+          ],
+          [
+            299,
+            482
+          ],
+          [
+            337,
+            482
+          ],
+          [
+            361,
+            464
+          ]
+        ],
+        "svgPath": "M 357 279 L 317 296 L 293 332 L 299 482 L 337 482 L 361 464 Z"
+      },
+      {
+        "area": 5207.5,
+        "bbox": {
+          "height": 152,
+          "width": 40,
+          "x": 419,
+          "y": 273
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 420 273 L 419 404 L 424 424 L 458 401 L 456 283 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-3",
+        "polygon": [
+          [
+            420,
+            273
+          ],
+          [
+            419,
+            404
+          ],
+          [
+            424,
+            424
+          ],
+          [
+            458,
+            401
+          ],
+          [
+            456,
+            283
+          ]
+        ],
+        "svgPath": "M 420 273 L 419 404 L 424 424 L 458 401 L 456 283 Z"
+      },
+      {
+        "area": 8529.5,
+        "bbox": {
+          "height": 193,
+          "width": 51,
+          "x": 366,
+          "y": 268
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 394 268 L 366 275 L 369 460 L 416 426 L 413 275 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-4",
+        "polygon": [
+          [
+            394,
+            268
+          ],
+          [
+            366,
+            275
+          ],
+          [
+            369,
+            460
+          ],
+          [
+            416,
+            426
+          ],
+          [
+            413,
+            275
+          ]
+        ],
+        "svgPath": "M 394 268 L 366 275 L 369 460 L 416 426 L 413 275 Z"
+      },
+      {
+        "area": 34711.5,
+        "bbox": {
+          "height": 248,
+          "width": 258,
+          "x": 105,
+          "y": 235
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 324 235 L 202 238 L 123 260 L 105 338 L 123 344 L 237 482 L 282 479 L 275 389 L 294 307 L 362 267 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "sofa-7",
+        "polygon": [
+          [
+            324,
+            235
+          ],
+          [
+            202,
+            238
+          ],
+          [
+            123,
+            260
+          ],
+          [
+            105,
+            338
+          ],
+          [
+            123,
+            344
+          ],
+          [
+            237,
+            482
+          ],
+          [
+            282,
+            479
+          ],
+          [
+            275,
+            389
+          ],
+          [
+            294,
+            307
+          ],
+          [
+            362,
+            267
+          ]
+        ],
+        "svgPath": "M 324 235 L 202 238 L 123 260 L 105 338 L 123 344 L 237 482 L 282 479 L 275 389 L 294 307 L 362 267 Z"
+      },
+      {
+        "area": 75405.5,
+        "bbox": {
+          "height": 249,
+          "width": 447,
+          "x": 103,
+          "y": 234
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 103 334 L 236 481 L 279 482 L 289 318 L 294 480 L 358 482 L 453 440 L 494 377 L 536 378 L 549 328 L 534 299 L 437 277 L 435 251 L 416 275 L 286 234 L 126 256 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "table-20",
+        "polygon": [
+          [
+            103,
+            334
+          ],
+          [
+            236,
+            481
+          ],
+          [
+            279,
+            482
+          ],
+          [
+            289,
+            318
+          ],
+          [
+            294,
+            480
+          ],
+          [
+            358,
+            482
+          ],
+          [
+            453,
+            440
+          ],
+          [
+            494,
+            377
+          ],
+          [
+            536,
+            378
+          ],
+          [
+            549,
+            328
+          ],
+          [
+            534,
+            299
+          ],
+          [
+            437,
+            277
+          ],
+          [
+            435,
+            251
+          ],
+          [
+            416,
+            275
+          ],
+          [
+            286,
+            234
+          ],
+          [
+            126,
+            256
+          ]
+        ],
+        "svgPath": "M 103 334 L 236 481 L 279 482 L 289 318 L 294 480 L 358 482 L 453 440 L 494 377 L 536 378 L 549 328 L 534 299 L 437 277 L 435 251 L 416 275 L 286 234 L 126 256 Z"
+      },
+      {
+        "area": 10085.0,
+        "bbox": {
+          "height": 305,
+          "width": 44,
+          "x": 593,
+          "y": 44
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 636 44 L 596 55 L 593 343 L 620 348 L 617 207 L 636 192 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "lamp-2",
+        "polygon": [
+          [
+            636,
+            44
+          ],
+          [
+            596,
+            55
+          ],
+          [
+            593,
+            343
+          ],
+          [
+            620,
+            348
+          ],
+          [
+            617,
+            207
+          ],
+          [
+            636,
+            192
+          ]
+        ],
+        "svgPath": "M 636 44 L 596 55 L 593 343 L 620 348 L 617 207 L 636 192 Z"
+      },
+      {
+        "area": 5441.0,
+        "bbox": {
+          "height": 54,
+          "width": 173,
+          "x": 626,
+          "y": 271
+        },
+        "fabricPathConfig": {
+          "fill": "rgba(255, 255, 255, 0.16)",
+          "path": "M 626 271 L 628 300 L 796 324 L 794 313 L 764 306 L 779 302 L 798 309 L 798 290 Z",
+          "stroke": "#ea580c",
+          "strokeUniform": true,
+          "strokeWidth": 2
+        },
+        "id": "plant-2",
+        "polygon": [
+          [
+            626,
+            271
+          ],
+          [
+            628,
+            300
+          ],
+          [
+            796,
+            324
+          ],
+          [
+            794,
+            313
+          ],
+          [
+            764,
+            306
+          ],
+          [
+            779,
+            302
+          ],
+          [
+            798,
+            309
+          ],
+          [
+            798,
+            290
+          ]
+        ],
+        "svgPath": "M 626 271 L 628 300 L 796 324 L 794 313 L 764 306 L 779 302 L 798 309 L 798 290 Z"
+      }
+    ],
+    "shareableSummary": {
+      "catalogItems": [
+        {
+          "category": "sofa",
+          "id": "sofa-midcentury",
+          "label": "Mid-century sofa",
+          "previewColor": "#7b6d62",
+          "style": "warm modern"
+        },
+        {
+          "category": "chair",
+          "id": "chair-scandi",
+          "label": "Scandinavian lounge chair",
+          "previewColor": "#d9d2c7",
+          "style": "airy minimal"
+        },
+        {
+          "category": "table",
+          "id": "table-wood",
+          "label": "Oak coffee table",
+          "previewColor": "#c8a47d",
+          "style": "natural"
+        },
+        {
+          "category": "lamp",
+          "id": "lamp-arc",
+          "label": "Arc floor lamp",
+          "previewColor": "#b88a5a",
+          "style": "statement"
+        }
+      ],
+      "implementationNote": "This notebook is a prototype: segmentation is partial or fallback-based, palette extraction is real, and furniture replacement is simulated with presets and tinting rather than generative synthesis.",
+      "styleTheme": "japandi",
+      "vectorLayers": [
+        {
+          "area": 32042.5,
+          "bbox": {
+            "height": 90,
+            "width": 656,
+            "x": 62,
+            "y": 0
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 62 4 L 401 89 L 717 0 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "wall-10",
+          "polygon": [
+            [
+              62,
+              4
+            ],
+            [
+              401,
+              89
+            ],
+            [
+              717,
+              0
+            ]
+          ],
+          "svgPath": "M 62 4 L 401 89 L 717 0 Z"
+        },
+        {
+          "area": 12519.0,
+          "bbox": {
+            "height": 207,
+            "width": 71,
+            "x": 292,
+            "y": 276
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 358 276 L 318 294 L 292 333 L 299 406 L 295 482 L 338 482 L 362 463 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "floor-15",
+          "polygon": [
+            [
+              358,
+              276
+            ],
+            [
+              318,
+              294
+            ],
+            [
+              292,
+              333
+            ],
+            [
+              299,
+              406
+            ],
+            [
+              295,
+              482
+            ],
+            [
+              338,
+              482
+            ],
+            [
+              362,
+              463
+            ]
+          ],
+          "svgPath": "M 358 276 L 318 294 L 292 333 L 299 406 L 295 482 L 338 482 L 362 463 Z"
+        },
+        {
+          "area": 21023.0,
+          "bbox": {
+            "height": 188,
+            "width": 178,
+            "x": 365,
+            "y": 273
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 536 301 L 522 294 L 519 352 L 515 292 L 494 288 L 491 322 L 489 287 L 420 273 L 419 407 L 414 275 L 366 274 L 365 460 L 414 431 L 419 408 L 423 425 L 542 349 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "floor-16",
+          "polygon": [
+            [
+              536,
+              301
+            ],
+            [
+              522,
+              294
+            ],
+            [
+              519,
+              352
+            ],
+            [
+              515,
+              292
+            ],
+            [
+              494,
+              288
+            ],
+            [
+              491,
+              322
+            ],
+            [
+              489,
+              287
+            ],
+            [
+              420,
+              273
+            ],
+            [
+              419,
+              407
+            ],
+            [
+              414,
+              275
+            ],
+            [
+              366,
+              274
+            ],
+            [
+              365,
+              460
+            ],
+            [
+              414,
+              431
+            ],
+            [
+              419,
+              408
+            ],
+            [
+              423,
+              425
+            ],
+            [
+              542,
+              349
+            ]
+          ],
+          "svgPath": "M 536 301 L 522 294 L 519 352 L 515 292 L 494 288 L 491 322 L 489 287 L 420 273 L 419 407 L 414 275 L 366 274 L 365 460 L 414 431 L 419 408 L 423 425 L 542 349 Z"
+        },
+        {
+          "area": 24861.5,
+          "bbox": {
+            "height": 217,
+            "width": 249,
+            "x": 113,
+            "y": 266
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 361 266 L 157 293 L 113 324 L 113 342 L 235 481 L 279 482 L 274 407 L 287 319 L 313 288 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "floor-17",
+          "polygon": [
+            [
+              361,
+              266
+            ],
+            [
+              157,
+              293
+            ],
+            [
+              113,
+              324
+            ],
+            [
+              113,
+              342
+            ],
+            [
+              235,
+              481
+            ],
+            [
+              279,
+              482
+            ],
+            [
+              274,
+              407
+            ],
+            [
+              287,
+              319
+            ],
+            [
+              313,
+              288
+            ]
+          ],
+          "svgPath": "M 361 266 L 157 293 L 113 324 L 113 342 L 235 481 L 279 482 L 274 407 L 287 319 L 313 288 Z"
+        },
+        {
+          "area": 145.0,
+          "bbox": {
+            "height": 8,
+            "width": 27,
+            "x": 173,
+            "y": 241
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 199 241 L 175 244 L 173 248 L 198 248 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "floor-24",
+          "polygon": [
+            [
+              199,
+              241
+            ],
+            [
+              175,
+              244
+            ],
+            [
+              173,
+              248
+            ],
+            [
+              198,
+              248
+            ]
+          ],
+          "svgPath": "M 199 241 L 175 244 L 173 248 L 198 248 Z"
+        },
+        {
+          "area": 6556.5,
+          "bbox": {
+            "height": 113,
+            "width": 94,
+            "x": 461,
+            "y": 284
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 461 284 L 461 396 L 519 355 L 536 352 L 539 374 L 541 350 L 554 338 L 537 302 L 522 294 L 519 353 L 517 295 L 494 289 L 491 349 L 489 289 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-1",
+          "polygon": [
+            [
+              461,
+              284
+            ],
+            [
+              461,
+              396
+            ],
+            [
+              519,
+              355
+            ],
+            [
+              536,
+              352
+            ],
+            [
+              539,
+              374
+            ],
+            [
+              541,
+              350
+            ],
+            [
+              554,
+              338
+            ],
+            [
+              537,
+              302
+            ],
+            [
+              522,
+              294
+            ],
+            [
+              519,
+              353
+            ],
+            [
+              517,
+              295
+            ],
+            [
+              494,
+              289
+            ],
+            [
+              491,
+              349
+            ],
+            [
+              489,
+              289
+            ]
+          ],
+          "svgPath": "M 461 284 L 461 396 L 519 355 L 536 352 L 539 374 L 541 350 L 554 338 L 537 302 L 522 294 L 519 353 L 517 295 L 494 289 L 491 349 L 489 289 Z"
+        },
+        {
+          "area": 12172.5,
+          "bbox": {
+            "height": 204,
+            "width": 69,
+            "x": 293,
+            "y": 279
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 357 279 L 317 296 L 293 332 L 299 482 L 337 482 L 361 464 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-2",
+          "polygon": [
+            [
+              357,
+              279
+            ],
+            [
+              317,
+              296
+            ],
+            [
+              293,
+              332
+            ],
+            [
+              299,
+              482
+            ],
+            [
+              337,
+              482
+            ],
+            [
+              361,
+              464
+            ]
+          ],
+          "svgPath": "M 357 279 L 317 296 L 293 332 L 299 482 L 337 482 L 361 464 Z"
+        },
+        {
+          "area": 5207.5,
+          "bbox": {
+            "height": 152,
+            "width": 40,
+            "x": 419,
+            "y": 273
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 420 273 L 419 404 L 424 424 L 458 401 L 456 283 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-3",
+          "polygon": [
+            [
+              420,
+              273
+            ],
+            [
+              419,
+              404
+            ],
+            [
+              424,
+              424
+            ],
+            [
+              458,
+              401
+            ],
+            [
+              456,
+              283
+            ]
+          ],
+          "svgPath": "M 420 273 L 419 404 L 424 424 L 458 401 L 456 283 Z"
+        },
+        {
+          "area": 8529.5,
+          "bbox": {
+            "height": 193,
+            "width": 51,
+            "x": 366,
+            "y": 268
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 394 268 L 366 275 L 369 460 L 416 426 L 413 275 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-4",
+          "polygon": [
+            [
+              394,
+              268
+            ],
+            [
+              366,
+              275
+            ],
+            [
+              369,
+              460
+            ],
+            [
+              416,
+              426
+            ],
+            [
+              413,
+              275
+            ]
+          ],
+          "svgPath": "M 394 268 L 366 275 L 369 460 L 416 426 L 413 275 Z"
+        },
+        {
+          "area": 34711.5,
+          "bbox": {
+            "height": 248,
+            "width": 258,
+            "x": 105,
+            "y": 235
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 324 235 L 202 238 L 123 260 L 105 338 L 123 344 L 237 482 L 282 479 L 275 389 L 294 307 L 362 267 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "sofa-7",
+          "polygon": [
+            [
+              324,
+              235
+            ],
+            [
+              202,
+              238
+            ],
+            [
+              123,
+              260
+            ],
+            [
+              105,
+              338
+            ],
+            [
+              123,
+              344
+            ],
+            [
+              237,
+              482
+            ],
+            [
+              282,
+              479
+            ],
+            [
+              275,
+              389
+            ],
+            [
+              294,
+              307
+            ],
+            [
+              362,
+              267
+            ]
+          ],
+          "svgPath": "M 324 235 L 202 238 L 123 260 L 105 338 L 123 344 L 237 482 L 282 479 L 275 389 L 294 307 L 362 267 Z"
+        },
+        {
+          "area": 75405.5,
+          "bbox": {
+            "height": 249,
+            "width": 447,
+            "x": 103,
+            "y": 234
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 103 334 L 236 481 L 279 482 L 289 318 L 294 480 L 358 482 L 453 440 L 494 377 L 536 378 L 549 328 L 534 299 L 437 277 L 435 251 L 416 275 L 286 234 L 126 256 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "table-20",
+          "polygon": [
+            [
+              103,
+              334
+            ],
+            [
+              236,
+              481
+            ],
+            [
+              279,
+              482
+            ],
+            [
+              289,
+              318
+            ],
+            [
+              294,
+              480
+            ],
+            [
+              358,
+              482
+            ],
+            [
+              453,
+              440
+            ],
+            [
+              494,
+              377
+            ],
+            [
+              536,
+              378
+            ],
+            [
+              549,
+              328
+            ],
+            [
+              534,
+              299
+            ],
+            [
+              437,
+              277
+            ],
+            [
+              435,
+              251
+            ],
+            [
+              416,
+              275
+            ],
+            [
+              286,
+              234
+            ],
+            [
+              126,
+              256
+            ]
+          ],
+          "svgPath": "M 103 334 L 236 481 L 279 482 L 289 318 L 294 480 L 358 482 L 453 440 L 494 377 L 536 378 L 549 328 L 534 299 L 437 277 L 435 251 L 416 275 L 286 234 L 126 256 Z"
+        },
+        {
+          "area": 10085.0,
+          "bbox": {
+            "height": 305,
+            "width": 44,
+            "x": 593,
+            "y": 44
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 636 44 L 596 55 L 593 343 L 620 348 L 617 207 L 636 192 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "lamp-2",
+          "polygon": [
+            [
+              636,
+              44
+            ],
+            [
+              596,
+              55
+            ],
+            [
+              593,
+              343
+            ],
+            [
+              620,
+              348
+            ],
+            [
+              617,
+              207
+            ],
+            [
+              636,
+              192
+            ]
+          ],
+          "svgPath": "M 636 44 L 596 55 L 593 343 L 620 348 L 617 207 L 636 192 Z"
+        },
+        {
+          "area": 5441.0,
+          "bbox": {
+            "height": 54,
+            "width": 173,
+            "x": 626,
+            "y": 271
+          },
+          "fabricPathConfig": {
+            "fill": "rgba(255, 255, 255, 0.16)",
+            "path": "M 626 271 L 628 300 L 796 324 L 794 313 L 764 306 L 779 302 L 798 309 L 798 290 Z",
+            "stroke": "#ea580c",
+            "strokeUniform": true,
+            "strokeWidth": 2
+          },
+          "id": "plant-2",
+          "polygon": [
+            [
+              626,
+              271
+            ],
+            [
+              628,
+              300
+            ],
+            [
+              796,
+              324
+            ],
+            [
+              794,
+              313
+            ],
+            [
+              764,
+              306
+            ],
+            [
+              779,
+              302
+            ],
+            [
+              798,
+              309
+            ],
+            [
+              798,
+              290
+            ]
+          ],
+          "svgPath": "M 626 271 L 628 300 L 796 324 L 794 313 L 764 306 L 779 302 L 798 309 L 798 290 Z"
+        }
+      ],
+      "wallPalette": {
+        "accent": "#35251d",
+        "name": "Warm Minimal",
+        "trim": "#ffffff",
+        "wall": "#7f7363"
+      }
+    }
+  },
+  "metrics": {
+    "coverage": {
+      "floor": 0.1547,
+      "lamp": 0.027,
+      "plant": 0.0145,
+      "sofa": 0.1772,
+      "table": 0.1966,
+      "wall": 0.0849
+    },
+    "furnitureDeltaMeanAbs": 25.83,
+    "perRegionIoU": {
+      "floor": 0.3465,
+      "lamp": 0.2227,
+      "plant": 0.1197,
+      "sofa": 0.4673,
+      "table": 0.0,
+      "wall": 0.1516
+    },
+    "proxySegmentationAccuracy": 0.218,
+    "wallDeltaMeanAbs": 71.38
+  },
+  "palette": {
+    "activeChoice": {
+      "accent": "#35251d",
+      "name": "Warm Minimal",
+      "trim": "#ffffff",
+      "wall": "#7f7363"
+    },
+    "recommendations": [
+      {
+        "accent": "#35251d",
+        "name": "Warm Minimal",
+        "trim": "#ffffff",
+        "wall": "#7f7363"
+      },
+      {
+        "accent": "#7f7363",
+        "name": "Soft Contrast",
+        "trim": "#f8f3ef",
+        "wall": "#a7a49c"
+      },
+      {
+        "accent": "#8ea3a0",
+        "name": "Calm Studio",
+        "trim": "#f4f1ed",
+        "wall": "#e8dfd5"
+      }
+    ],
+    "roomPalette": {
+      "kmeansCompactness": 504044366.6894458,
+      "regionPixelCount": 386716,
+      "roles": {
+        "accent": {
+          "swatch": {
+            "hex": "#35251d",
+            "rank": 2,
+            "rgb": [
+              53,
+              37,
+              29
+            ],
+            "share": 0.2202
+          },
+          "weight": 10
+        },
+        "dominant": {
+          "swatch": {
+            "hex": "#7f7363",
+            "rank": 0,
+            "rgb": [
+              127,
+              115,
+              99
+            ],
+            "share": 0.3708
+          },
+          "weight": 60
+        },
+        "secondary": {
+          "swatch": {
+            "hex": "#a7a49c",
+            "rank": 1,
+            "rgb": [
+              167,
+              164,
+              156
+            ],
+            "share": 0.2862
+          },
+          "weight": 30
+        }
+      },
+      "swatches": [
+        {
+          "hex": "#7f7363",
+          "rank": 0,
+          "rgb": [
+            127,
+            115,
+            99
+          ],
+          "share": 0.3708
+        },
+        {
+          "hex": "#a7a49c",
+          "rank": 1,
+          "rgb": [
+            167,
+            164,
+            156
+          ],
+          "share": 0.2862
+        },
+        {
+          "hex": "#35251d",
+          "rank": 2,
+          "rgb": [
+            53,
+            37,
+            29
+          ],
+          "share": 0.2202
+        },
+        {
+          "hex": "#a13424",
+          "rank": 3,
+          "rgb": [
+            161,
+            52,
+            36
+          ],
+          "share": 0.1228
+        }
+      ]
+    }
+  },
+  "regions": {
+    "floor": {
+      "coverage": 0.1547,
+      "pixelCount": 59832,
+      "proxyIoU": 0.3465,
+      "vectorLayerCount": 4
+    },
+    "lamp": {
+      "coverage": 0.027,
+      "pixelCount": 10439,
+      "proxyIoU": 0.2227,
+      "vectorLayerCount": 1
+    },
+    "plant": {
+      "coverage": 0.0145,
+      "pixelCount": 5626,
+      "proxyIoU": 0.1197,
+      "vectorLayerCount": 1
+    },
+    "sofa": {
+      "coverage": 0.1772,
+      "pixelCount": 68511,
+      "proxyIoU": 0.4673,
+      "vectorLayerCount": 5
+    },
+    "table": {
+      "coverage": 0.1966,
+      "pixelCount": 76014,
+      "proxyIoU": 0.0,
+      "vectorLayerCount": 1
+    },
+    "wall": {
+      "coverage": 0.0849,
+      "pixelCount": 32832,
+      "proxyIoU": 0.1516,
+      "vectorLayerCount": 1
+    }
+  },
+  "source": {
+    "imageSize": {
+      "height": 484,
+      "width": 799
+    },
+    "imageSource": "test2.png"
+  }
+}

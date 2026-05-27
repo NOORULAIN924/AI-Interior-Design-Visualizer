@@ -1,25 +1,29 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Landing(){
+export default function Landing() {
   return (
-    <div className="page landing">
-      <section className="hero">
-        <div className="hero-copy">
-          <h2>Redecorate Your Room Before You Buy</h2>
-          <p>Upload a photo of your room, swap furniture, test color palettes, and preview a realistic redesign right in your browser.</p>
-          <div className="hero-cta">
-            <Link to="/dashboard" className="btn primary">Try the Visualizer</Link>
-            <Link to="/about" className="btn">Learn More</Link>
+    <div className="page page-v2">
+      <section className="hero-v2">
+        <div className="hero-copy-v2">
+          <p className="tagline-v2">Redecorate your room before buying a single thing</p>
+          <h1>Design your next interior in minutes with AI-guided room visualization.</h1>
+          <p>
+            Upload your room photo, segment walls and furniture, test paint schemes, and preview styled redesigns
+            side-by-side before spending on products.
+          </p>
+          <div className="hero-cta-v2">
+            <Link to="/dashboard" className="btn-v2 primary">Start Designing</Link>
+            <Link to="/results" className="btn-v2">View Results</Link>
           </div>
         </div>
-        <div className="hero-visual">
+        <div className="hero-visual-v2">
           <svg width="420" height="300" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="hero-svg">
             <rect x="0" y="0" width="420" height="300" rx="12" fill="url(#g)" />
             <defs>
               <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#e6f7ff"/>
-                <stop offset="1" stopColor="#f0f9f4"/>
+                <stop offset="0" stopColor="#e6f7ff" />
+                <stop offset="1" stopColor="#f0f9f4" />
               </linearGradient>
             </defs>
             <g transform="translate(28,22)">
@@ -30,18 +34,33 @@ export default function Landing(){
           </svg>
         </div>
       </section>
-      <section className="features">
-        <div className="feature">
-          <h4>Smart Palette Suggestions</h4>
-          <p>AI extracts a harmonious color palette from your photo and suggests complementary combinations.</p>
-        </div>
-        <div className="feature">
-          <h4>Drag-and-Drop Catalog</h4>
-          <p>Place furniture from our curated catalog, move and resize items, and experiment with layouts.</p>
-        </div>
-        <div className="feature">
-          <h4>Share & Export</h4>
-          <p>Download high-resolution redesigns or copy a shareable JSON representation of your scene.</p>
+
+      <section className="feature-grid-v2">
+        <article className="feature-card-v2">
+          <h3>Semantic Segmentation</h3>
+          <p>Prepare room-aware masks for walls, floor, and furniture zones to enable controlled redesign decisions.</p>
+        </article>
+        <article className="feature-card-v2">
+          <h3>AI Palette Engine</h3>
+          <p>Generate balanced color combinations from your uploaded scene and apply suggestions instantly.</p>
+        </article>
+        <article className="feature-card-v2">
+          <h3>Interactive Furniture Layout</h3>
+          <p>Use drag-and-drop catalog items and flexible canvas tools to test arrangements before purchase.</p>
+        </article>
+        <article className="feature-card-v2">
+          <h3>Before/After Comparison</h3>
+          <p>Evaluate visual impact immediately with side-by-side previews and export-ready redesign views.</p>
+        </article>
+      </section>
+
+      <section className="journey-v2">
+        <h2>How it works</h2>
+        <div className="steps-v2">
+          <div><strong>1</strong><span>Upload your room photo</span></div>
+          <div><strong>2</strong><span>Choose style and room context</span></div>
+          <div><strong>3</strong><span>Adjust colors and furniture</span></div>
+          <div><strong>4</strong><span>Save and share your redesign</span></div>
         </div>
       </section>
     </div>

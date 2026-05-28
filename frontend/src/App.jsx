@@ -12,6 +12,11 @@ export default function App(){
   const [beforeImage, setBeforeImage] = useState(null)
   const [palette, setPalette] = useState([])
   const [targetColor, setTargetColor] = useState('#d6cfc6')
+  const [designOptions, setDesignOptions] = useState({
+    designTheme: 'Mid-Century Modern',
+    roomType: 'Kitchen',
+    generatedAt: null
+  })
 
   return (
     <BrowserRouter>
@@ -20,8 +25,8 @@ export default function App(){
         <main className="page-container">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/dashboard" element={<Dashboard beforeImage={beforeImage} setBeforeImage={setBeforeImage} palette={palette} setPalette={setPalette} targetColor={targetColor} setTargetColor={setTargetColor} />} />
-            <Route path="/results" element={<Results beforeImage={beforeImage} targetColor={targetColor} />} />
+            <Route path="/dashboard" element={<Dashboard beforeImage={beforeImage} setBeforeImage={setBeforeImage} palette={palette} setPalette={setPalette} targetColor={targetColor} setTargetColor={setTargetColor} designOptions={designOptions} setDesignOptions={setDesignOptions} />} />
+            <Route path="/results" element={<Results beforeImage={beforeImage} targetColor={targetColor} designOptions={designOptions} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/about" element={<About />} />
           </Routes>

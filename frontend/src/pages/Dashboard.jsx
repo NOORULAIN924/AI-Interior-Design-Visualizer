@@ -1,18 +1,14 @@
-import React, { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { extractPalette } from '../utils/palette'
 
-export default function Dashboard({ beforeImage, setBeforeImage, palette, setPalette, targetColor, setTargetColor }) {
-  const [designTheme, setDesignTheme] = useState('Mid-Century Modern')
-  const [roomType, setRoomType] = useState('Kitchen')
-  const [styleStrength, setStyleStrength] = useState('Balanced')
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:5000'
 
-  const styleOptions = useMemo(() => [
-    { key: 'Faithful', title: 'Faithful', desc: "Keeps your room's layout intact" },
-    { key: 'Balanced', title: 'Balanced', desc: 'A blend of your space and the style' },
-    { key: 'Creative', title: 'Creative', desc: 'More AI freedom with the design' },
-    { key: 'Bold', title: 'Bold', desc: 'Full AI reimagining of your space' }
-  ], [])
+export default function Dashboard({ beforeImage, setBeforeImage, palette, setPalette, targetColor, setTargetColor, designOptions, setDesignOptions }) {
+  const navigate = useNavigate()
+  const [designTheme, setDesignTheme] = useState(designOptions?.designTheme || 'Mid-Century Modern')
+  const [roomType, setRoomType] = useState(designOptions?.roomType || 'Kitchen')
+  const [paletteSuggestions, setPaletteSuggestions] = useState([])
 
   async function handleUpload(e) {
     const file = e.target.files && e.target.files[0]
@@ -23,10 +19,30 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
       setBeforeImage && setBeforeImage(dataUrl)
       if (setPalette) {
         try {
-          const p = await extractPalette(dataUrl, 6)
-          setPalette(p)
+          const res = await fetch(`${API_BASE}/api/palette`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ imageData: dataUrl })
+          })
+          if (res.ok) {
+            const payload = await res.json()
+            const p = (payload.roomPalette?.swatches || []).slice(0, 6).map((sw) => sw.hex)
+            setPalette(p)
+            setPaletteSuggestions(payload.recommendations || [])
+          } else {
+            const p = await extractPalette(dataUrl, 6)
+            setPalette(p)
+            setPaletteSuggestions([])
+          }
         } catch (err) {
           console.warn(err)
+          try {
+            const p = await extractPalette(dataUrl, 6)
+            setPalette(p)
+            setPaletteSuggestions([])
+          } catch (innerErr) {
+            console.warn(innerErr)
+          }
         }
       }
     }
@@ -38,23 +54,20 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
       alert('Upload a room photo first to generate a redesign preview.')
       return
     }
+
+    setDesignOptions && setDesignOptions({
+      designTheme,
+      roomType,
+      generatedAt: Date.now()
+    })
+    navigate('/results')
   }
 
   return (
-    <div className="page dashboard-v2">
-      <aside className="dash-sidebar-v2">
-        <div className="dash-brand-v2">Interior Designer</div>
-        <nav className="dash-nav-v2" aria-label="Dashboard">
-          <Link className="nav-item-v2 active" to="/dashboard">Design</Link>
-          <Link className="nav-item-v2" to="/results">Gallery</Link>
-          <Link className="nav-item-v2" to="/analytics">Settings</Link>
-          <Link className="nav-item-v2" to="/about">Help</Link>
-        </nav>
-      </aside>
-
+    <div className="page page-v2">
       <section className="dash-main-v2">
         <div className="dash-top-card-v2">
-          <h3>Upload a photo of your room and let AI reimagine it with a new design style</h3>
+          <h3>Upload a room photo, segment the space, swap furniture, and preview the redesign in the browser</h3>
 
           <div className="dash-row-v2">
             <label className="dash-field-v2">
@@ -79,24 +92,6 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
             </label>
           </div>
 
-          <div className="style-block-v2">
-            <div className="style-head-v2">Style Strength</div>
-            <p>How freely the AI reimagines your space</p>
-            <div className="style-grid-v2">
-              {styleOptions.map(opt => (
-                <button
-                  key={opt.key}
-                  className={`style-card-v2 ${styleStrength === opt.key ? 'selected' : ''}`}
-                  type="button"
-                  onClick={() => setStyleStrength(opt.key)}
-                >
-                  <strong>{opt.title}</strong>
-                  <span>{opt.desc}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="dash-actions-v2">
             <label className="upload-btn-v2" htmlFor="room-upload">Upload Photo</label>
             <input id="room-upload" type="file" accept="image/*" onChange={handleUpload} hidden />
@@ -110,6 +105,26 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
               ))}
             </div>
           )}
+
+          <div className="palette-presets-v2">
+            <div className="style-head-v2">AI-suggested palette combos</div>
+            <div className="palette-preset-row-v2">
+              {paletteSuggestions.length > 0 ? (
+                paletteSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion.name}
+                    type="button"
+                    className="palette-dot-v2"
+                    style={{ background: suggestion.wall }}
+                    onClick={() => setTargetColor && setTargetColor(suggestion.wall)}
+                    title={`${suggestion.name}: ${suggestion.wall}`}
+                  />
+                ))
+              ) : (
+                <span className="palette-hint-v2">Upload a photo to get AI palette suggestions</span>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="compare-wrap-v2">

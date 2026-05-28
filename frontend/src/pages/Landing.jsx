@@ -7,10 +7,10 @@ export default function Landing() {
       <section className="hero-v2">
         <div className="hero-copy-v2">
           <p className="tagline-v2">Redecorate your room before buying a single thing</p>
-          <h1>Design your next interior in minutes with AI-guided room visualization.</h1>
+          <h1>Redesign your room before buying a single thing.</h1>
           <p>
-            Upload your room photo, segment walls and furniture, test paint schemes, and preview styled redesigns
-            side-by-side before spending on products.
+            Upload a room photo, segment walls, floor, and furniture in the browser, then test wall colors,
+            furniture styles, and full-room redesigns side-by-side.
           </p>
           <div className="hero-cta-v2">
             <Link to="/dashboard" className="btn-v2 primary">Start Designing</Link>
@@ -38,29 +38,29 @@ export default function Landing() {
       <section className="feature-grid-v2">
         <article className="feature-card-v2">
           <h3>Semantic Segmentation</h3>
-          <p>Prepare room-aware masks for walls, floor, and furniture zones to enable controlled redesign decisions.</p>
+          <p>Use DeepLab or SAM-style masks to isolate walls, floors, and furniture for precise edits.</p>
         </article>
         <article className="feature-card-v2">
           <h3>AI Palette Engine</h3>
-          <p>Generate balanced color combinations from your uploaded scene and apply suggestions instantly.</p>
+          <p>Recommend palette combinations that match the room and make color choices easier.</p>
         </article>
         <article className="feature-card-v2">
-          <h3>Interactive Furniture Layout</h3>
-          <p>Use drag-and-drop catalog items and flexible canvas tools to test arrangements before purchase.</p>
+          <h3>Furniture Swap UX</h3>
+          <p>Drag catalog pieces onto the scene, preview replacements, and fine-tune scale and rotation.</p>
         </article>
         <article className="feature-card-v2">
-          <h3>Before/After Comparison</h3>
-          <p>Evaluate visual impact immediately with side-by-side previews and export-ready redesign views.</p>
+          <h3>Save & Share</h3>
+          <p>Keep your redesign state, export previews, and share the final concept with others.</p>
         </article>
       </section>
 
       <section className="journey-v2">
         <h2>How it works</h2>
         <div className="steps-v2">
-          <div><strong>1</strong><span>Upload your room photo</span></div>
-          <div><strong>2</strong><span>Choose style and room context</span></div>
-          <div><strong>3</strong><span>Adjust colors and furniture</span></div>
-          <div><strong>4</strong><span>Save and share your redesign</span></div>
+          <div><strong>1</strong><span>Upload a room photo</span></div>
+          <div><strong>2</strong><span>Segment walls, floor, and furniture</span></div>
+          <div><strong>3</strong><span>Swap furniture and tune colors</span></div>
+          <div><strong>4</strong><span>Save and share the redesign</span></div>
         </div>
       </section>
     </div>

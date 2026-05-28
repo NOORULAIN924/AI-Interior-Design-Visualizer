@@ -8,7 +8,7 @@ export default function About() {
         <div className="section-head-v2">
           <div>
             <h2>About</h2>
-            <p>AI Interior Design Visualizer helps you redesign confidently before buying paint, furniture, or decor.</p>
+            <p>Redecorate your room before buying a single thing. Everything happens in the browser.</p>
           </div>
           <Link to="/dashboard" className="btn-v2 primary">Open Dashboard</Link>
         </div>
@@ -18,8 +18,8 @@ export default function About() {
             <h3>Core workflow</h3>
             <ul>
               <li>Upload a room photo directly in the browser.</li>
-              <li>Use segmentation-aware design controls for walls and furniture zones.</li>
-              <li>Apply style strength and room context to guide redesign outputs.</li>
+              <li>Segment walls, floor, and furniture for precise design edits.</li>
+              <li>Change wall colors, swap furniture styles, and preview the redesign live.</li>
               <li>Compare before and after visuals side-by-side.</li>
               <li>Save or share design payloads for collaboration.</li>
             </ul>
@@ -30,7 +30,7 @@ export default function About() {
             <ul>
               <li>Frontend: React.js + Fabric.js canvas interactions</li>
               <li>Backend target: Flask + Python inference services</li>
-              <li>Vision models target: SAM / DeepLab + style-transfer pipeline</li>
+              <li>Vision models target: SAM or DeepLab segmentation with style-transfer support</li>
               <li>Image operations: OpenCV preprocessing and mask utilities</li>
               <li>Model runtime: PyTorch-based serving</li>
             </ul>

@@ -1,42 +1,29 @@
-from flask import Flask, request, jsonify, send_from_directory
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+from flask import Flask
 from flask_cors import CORS
-import os
-from datetime import datetime
 
-app = Flask(__name__)
-CORS(app)
+# Allows running as: python backend/app.py
+if __package__ in (None, ""):
+    sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+from backend.config import ensure_storage_dirs
+from backend.routes import register_routes
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files.get('image')
-    if not f:
-        return jsonify({'error':'no file'}), 400
-    fname = datetime.utcnow().strftime('%Y%m%d%H%M%S_') + f.filename
-    path = os.path.join(UPLOAD_FOLDER, fname)
-    f.save(path)
-    # in a real app, run segmentation and palette extraction here
-    palette = ['#f2e9e4', '#c3d2d8', '#6b8e8f']
-    url = f'http://localhost:5000/uploads/{fname}'
-    return jsonify({'url':url, 'palette':palette})
 
-@app.route('/uploads/<path:fname>')
-def uploaded_file(fname):
-    return send_from_directory(UPLOAD_FOLDER, fname)
+def create_app() -> Flask:
+    ensure_storage_dirs()
+    app = Flask(__name__)
+    CORS(app)
+    register_routes(app)
+    return app
 
-@app.route('/palette', methods=['POST'])
-def palette():
-    # Accept image and return suggested palette (stub)
-    return jsonify({'palette':['#ffffff','#e6e6e6','#333333']})
 
-@app.route('/save', methods=['POST'])
-def save():
-    data = request.json or {}
-    # Store the design metadata; here we just echo with an id
-    design_id = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-    return jsonify({'id':design_id, 'share_url': f'http://example.com/designs/{design_id}'})
+app = create_app()
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)

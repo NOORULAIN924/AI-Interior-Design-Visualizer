@@ -4,19 +4,7 @@ import { Link } from 'react-router-dom'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:5000'
 
-function mapThemeToApi(theme) {
-  const normalized = (theme || '').toLowerCase().trim()
-  const map = {
-    'mid-century modern': 'modern_luxe',
-    'scandinavian': 'scandinavian',
-    'minimal contemporary': 'modern_luxe',
-    'japandi': 'japandi',
-    'industrial': 'industrial'
-  }
-  return map[normalized] || 'japandi'
-}
-
-export default function Results({ beforeImage, palette = [], targetColor, setTargetColor, designOptions }) {
+export default function Results({ uiConfig, socket, clientId, beforeImage, palette = [], targetColor, setTargetColor, designOptions }) {
   const [previewUrl, setPreviewUrl] = useState('')
   const [editableImage, setEditableImage] = useState('')
   const [previewFailed, setPreviewFailed] = useState(false)
@@ -25,6 +13,8 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
   const [loading, setLoading] = useState(false)
   const [roomPalette, setRoomPalette] = useState([])
   const [paletteSuggestions, setPaletteSuggestions] = useState([])
+  const [streamStatus, setStreamStatus] = useState('')
+  const [streamProgress, setStreamProgress] = useState(0)
 
   const topPalette = [...new Set([
     ...palette,
@@ -56,6 +46,59 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
   }, [beforeImage])
 
   useEffect(() => {
+    if (!socket) return undefined
+    const matchesClient = (payload) => !clientId || payload?.clientId === clientId
+
+    const onSegStart = (payload) => {
+      if (!matchesClient(payload)) return
+      setStreamStatus('Segmenting room...')
+      setStreamProgress(payload?.progress ?? 0)
+    }
+    const onSegProgress = (payload) => {
+      if (!matchesClient(payload)) return
+      setStreamStatus('Segmenting room...')
+      setStreamProgress(payload?.progress ?? 0)
+    }
+    const onSegDone = (payload) => {
+      if (!matchesClient(payload)) return
+      if (payload?.vectorLayers) setSegmentLayers(payload.vectorLayers)
+      if (payload?.previewPartial) {
+        setEditableImage(payload.previewPartial)
+      }
+      setStreamStatus('Segmentation complete')
+      setStreamProgress(70)
+    }
+    const onRecolorStart = (payload) => {
+      if (!matchesClient(payload)) return
+      setStreamStatus('Applying recolor...')
+      setStreamProgress(payload?.progress ?? 0)
+    }
+    const onRecolorDone = (payload) => {
+      if (!matchesClient(payload)) return
+      if (payload?.previewUrl) {
+        setPreviewUrl(payload.previewUrl)
+        resolveEditableImage(payload.previewUrl, beforeImage)
+      }
+      setStreamStatus('Recolor complete')
+      setStreamProgress(100)
+    }
+
+    socket.on('segmentation_started', onSegStart)
+    socket.on('segmentation_progress', onSegProgress)
+    socket.on('segmentation_done', onSegDone)
+    socket.on('recolor_started', onRecolorStart)
+    socket.on('recolor_done', onRecolorDone)
+
+    return () => {
+      socket.off('segmentation_started', onSegStart)
+      socket.off('segmentation_progress', onSegProgress)
+      socket.off('segmentation_done', onSegDone)
+      socket.off('recolor_started', onRecolorStart)
+      socket.off('recolor_done', onRecolorDone)
+    }
+  }, [socket, clientId, beforeImage])
+
+  useEffect(() => {
     async function runRedesign() {
       if (!beforeImage) {
         setPreviewUrl('')
@@ -69,12 +112,13 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
       try {
         const res = await fetch(`${API_BASE}/api/redesign`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-Client-ID': clientId || '' },
           body: JSON.stringify({
             imageData: beforeImage,
             wallColor: targetColor,
-            styleTheme: mapThemeToApi(designOptions?.designTheme),
-            roomType: designOptions?.roomType
+            styleTheme: designOptions?.designTheme || uiConfig?.defaultTheme,
+            roomType: designOptions?.roomType,
+            clientId
           })
         })
         if (!res.ok) throw new Error('Failed to generate redesign preview')
@@ -85,18 +129,8 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
         const absPreview = payload.previewUrl ? `${API_BASE}${payload.previewUrl}` : ''
         setPreviewUrl(absPreview)
         resolveEditableImage(absPreview, beforeImage)
-
-        // Fetch semantic vector layers separately to drive canvas mask overlays.
-        const segRes = await fetch(`${API_BASE}/api/segment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageData: beforeImage })
-        })
-        if (segRes.ok) {
-          const segPayload = await segRes.json()
-          setSegmentLayers(segPayload.vectorLayers || {})
-        } else {
-          setSegmentLayers({})
+        if (payload.vectorLayers) {
+          setSegmentLayers(payload.vectorLayers)
         }
       } catch (err) {
         console.warn(err)
@@ -112,7 +146,7 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
     }
 
     runRedesign()
-  }, [beforeImage, targetColor, designOptions?.designTheme, designOptions?.roomType, designOptions?.generatedAt])
+  }, [beforeImage, targetColor, designOptions?.designTheme, designOptions?.roomType, designOptions?.generatedAt, clientId, uiConfig?.defaultTheme])
 
   async function handleShare() {
     const payload = {
@@ -177,38 +211,30 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
         </div>
 
         <div className="results-grid-v2">
-          <div className="result-pane-v2">
-            <h3>Before</h3>
+          <div className="result-pane-v2 before-pane-v2">
+            <h3>Before · uploaded photo</h3>
             {beforeImage ? <img src={beforeImage} alt="Original room" /> : <div className="img-empty-v2">Upload an image in Dashboard</div>}
+            <div className="before-catalog-v2">
+              <div className="layers-help-v2" style={{ marginTop: 12 }}>Furniture catalog</div>
+              <div className="catalog-list-v2 catalog-list-before-v2">
+                {(uiConfig?.catalog || []).length > 0 ? (uiConfig.catalog.map((item) => (
+                  <div key={item.id} className="catalog-item catalog-item-v2" draggable onDragStart={(e) => e.dataTransfer.setData('text/plain', JSON.stringify(item))} title={`Drag ${item.label || item.name || item.category}`}>
+                    <div className="catalog-thumb catalog-thumb-swatch" style={{ background: item.previewColor || '#6b7280' }} />
+                    <div className="variant-label">{item.label || item.name || item.category}</div>
+                  </div>
+                ))) : <div className="layers-empty-v2">No catalog data loaded.</div>}
+              </div>
+            </div>
           </div>
           <div className="result-pane-v2">
-            <h3>After</h3>
+            <h3>After · AI-generated preview</h3>
             {loading && <div className="img-empty-v2">Generating redesign preview...</div>}
             {!loading && (
               <>
                 {previewUrl && !previewFailed && <p className="result-note-v2">AI preview loaded. You can keep editing this in the canvas below.</p>}
                 {previewFailed && <p className="result-note-v2">Preview image could not be loaded. Using your uploaded image for editing.</p>}
+                {streamStatus && <p className="result-note-v2">{streamStatus} ({streamProgress}%)</p>}
                 <div style={{ marginBottom: 8 }}>
-                  <button type="button" className="btn-v2" onClick={async () => {
-                    // trigger backend recolor for wall
-                    try {
-                      const res = await fetch(`${API_BASE}/api/recolor`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ imageData: beforeImage, region: 'wall', targetColor: targetColor })
-                      })
-                      if (!res.ok) throw new Error('Recolor failed')
-                      const payload = await res.json()
-                      const preview = payload.previewUrl
-                      if (preview) {
-                        setPreviewUrl(preview)
-                        resolveEditableImage(preview, beforeImage)
-                      }
-                    } catch (err) {
-                      console.warn(err)
-                      alert('Recolor failed — check backend logs')
-                    }
-                  }}>Apply AI Recolor</button>
                   <button type="button" className="btn-v2" onClick={async () => {
                     if (!targetColor) { alert('Pick a color first'); return }
                     try {
@@ -229,7 +255,7 @@ export default function Results({ beforeImage, palette = [], targetColor, setTar
                     }
                   }}>Get Palettes</button>
                 </div>
-                <CanvasView image={editableImage || beforeImage} targetColor={targetColor} setTargetColor={setTargetColor} segmentLayers={segmentLayers} />
+                <CanvasView image={editableImage || beforeImage} targetColor={targetColor} setTargetColor={setTargetColor} clientId={clientId} segmentLayers={segmentLayers} />
               </>
             )}
           </div>

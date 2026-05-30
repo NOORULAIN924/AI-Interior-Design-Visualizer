@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-export default function CanvasView({ image, targetColor: propTargetColor, setTargetColor: propSetTargetColor, segmentLayers }) {
+export default function CanvasView({ image, targetColor: propTargetColor, setTargetColor: propSetTargetColor, segmentLayers, clientId }) {
   const canvasRef = useRef(null)
+  const underlayRef = useRef(null)
   const fabricRef = useRef(null)
   const fabricLibRef = useRef(null)
   const canvasIdRef = useRef(`canvas-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)
@@ -10,15 +11,20 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
   const [overlayVisible, setOverlayVisible] = useState(false)
   const [overlayOpacity, setOverlayOpacity] = useState(0.22)
   const [layers, setLayers] = useState([])
+  const [selectedLayerId, setSelectedLayerId] = useState('')
   const [hue, setHue] = useState(0)
   const [saturate, setSaturate] = useState(1)
   const [lightness, setLightness] = useState(1)
+  const [brushSize, setBrushSize] = useState(18)
+  const [brushMode, setBrushMode] = useState(false)
   const [fabricReady, setFabricReady] = useState(false)
-  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [showAdvanced, setShowAdvanced] = useState(true)
+  const [dropHint, setDropHint] = useState('Drag a catalog item here to place it on the canvas')
   const pickingRef = useRef(false)
   const targetColorRef = useRef(targetColor)
   const overlayVisibleRef = useRef(false)
   const overlayOpacityRef = useRef(0.22)
+  const hslRef = useRef({ hue: 0, saturate: 1, lightness: 1 })
 
   useEffect(() => {
     if (propTargetColor) setTargetColor(propTargetColor)
@@ -43,6 +49,17 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
   }, [overlayOpacity])
 
   useEffect(() => {
+    hslRef.current = { hue, saturate, lightness }
+    updateVisualFilter()
+  }, [hue, saturate, lightness])
+
+  useEffect(() => {
+    const c = fabricRef.current
+    if (!c || !c.freeDrawingBrush) return
+    c.freeDrawingBrush.width = brushSize
+  }, [brushSize, brushMode])
+
+  useEffect(() => {
     let c = null
     let mounted = true
     const el = canvasRef.current
@@ -63,16 +80,25 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
 
       function refreshLayers() {
         if (!c) return
-        const objs = c.getObjects().map((o, idx) => {
+        const maskMap = new Map()
+        c.getObjects().forEach((o, idx) => {
           const isMaskLike = !!(o.isSegOverlay || o.isMask || o.isBackendMask)
-          return {
-            id: o._maskId || (`o-${idx}`),
-            type: isMaskLike ? 'mask' : (o._isBackgroundImage ? 'background' : (o.type || 'object')),
-            name: isMaskLike ? (o.regionName || 'Segment') : (o._isBackgroundImage ? 'Background' : (o.name || o.type || 'Object')),
-            refIndex: idx
+          if (!isMaskLike) return
+          const id = o._maskId || `o-${idx}`
+          const regionName = o.regionName || o.name || 'Segment'
+          const nextLayer = {
+            id,
+            type: 'mask',
+            name: regionName,
+            refIndex: idx,
+            regionName
           }
-        }).filter(l => l.type === 'mask')
-        setLayers(objs)
+          const existing = maskMap.get(id)
+          if (!existing || o.isBackendMask) {
+            maskMap.set(id, nextLayer)
+          }
+        })
+        setLayers(Array.from(maskMap.values()))
       }
       c.on('object:added', refreshLayers)
       c.on('object:removed', refreshLayers)
@@ -318,18 +344,40 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
 
   function exportImage() {
     const c = fabricRef.current
+    if (!c) return
+    const underlayEl = underlayRef.current
     const data = c.toDataURL({ format: 'png' })
-    const a = document.createElement('a')
-    a.href = data
-    a.download = 'redesign.png'
-    a.click()
+    if (!underlayEl) {
+      const a = document.createElement('a')
+      a.href = data
+      a.download = 'redesign.png'
+      a.click()
+      return
+    }
+
+    const exportCanvas = document.createElement('canvas')
+    exportCanvas.width = Math.max(1, c.getWidth())
+    exportCanvas.height = Math.max(1, c.getHeight())
+    const ctx = exportCanvas.getContext('2d')
+    ctx.drawImage(underlayEl, 0, 0, exportCanvas.width, exportCanvas.height)
+    const overlayImg = new Image()
+    overlayImg.onload = () => {
+      ctx.drawImage(overlayImg, 0, 0, exportCanvas.width, exportCanvas.height)
+      const a = document.createElement('a')
+      a.href = exportCanvas.toDataURL('image/png')
+      a.download = 'redesign.png'
+      a.click()
+    }
+    overlayImg.src = data
   }
 
   function enableBrushMode(enable) {
     const c = fabricRef.current
+    if (!c) return
+    setBrushMode(!!enable)
     c.isDrawingMode = !!enable
     if (enable) {
-      c.freeDrawingBrush.width = 18
+      c.freeDrawingBrush.width = brushSize
       c.freeDrawingBrush.color = 'white'
     }
   }
@@ -436,6 +484,8 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
       })
       maskPoly.isMask = true
       maskPoly.isBackendMask = true
+      maskPoly.name = region
+      maskPoly.regionName = region
       maskPoly._maskId = maskId
       c.add(maskPoly)
 
@@ -462,6 +512,11 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
     drawBackendSegmentLayers(segmentLayers)
   }, [segmentLayers, fabricReady])
 
+  useEffect(() => {
+    if (selectedLayerId || layers.length === 0) return
+    setSelectedLayerId(layers[0].id)
+  }, [layers, selectedLayerId])
+
   function copyShareCode() {
     const c = fabricRef.current
     const json = c.toJSON(['_isBackgroundImage'])
@@ -471,6 +526,136 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
       navigator.clipboard.writeText(reader.result).then(() => alert('Design JSON copied to clipboard'))
     }
     reader.readAsText(blob)
+  }
+
+  function replaceBackgroundWithDataUrl(dataUrl) {
+    const c = fabricRef.current
+    const fabricLib = fabricLibRef.current
+    if (!c || !fabricLib || !dataUrl) return
+    fabricLib.Image.fromURL(dataUrl, img => {
+      const w = c.getWidth() || Math.min(960, c.upperCanvasEl.parentElement?.clientWidth || 640)
+      img.scaleToWidth(w)
+      img.set({ left: 0, top: 0, selectable: false })
+      const objs = c.getObjects().filter(o => o._isBackgroundImage)
+      objs.forEach(o => c.remove(o))
+      img._isBackgroundImage = true
+      c.add(img)
+      img.sendToBack()
+      c.requestRenderAll()
+    }, { crossOrigin: 'anonymous' })
+  }
+
+  function addDroppedCatalogItem(item, dropX, dropY) {
+    const c = fabricRef.current
+    const fabricLib = fabricLibRef.current
+    if (!c || !fabricLib || !item) return
+
+    const left = dropX - 48
+    const top = dropY - 28
+    const fill = item.previewColor || '#7b6d62'
+    const label = item.label || item.name || item.category || 'Furniture'
+    const rect = new fabricLib.Rect({
+      left,
+      top,
+      width: 96,
+      height: 56,
+      rx: 10,
+      ry: 10,
+      fill,
+      opacity: 0.86,
+      stroke: '#ffffff',
+      strokeWidth: 1,
+      selectable: true,
+      hasControls: true,
+      hasBorders: true,
+      cornerStyle: 'circle'
+    })
+    const text = new fabricLib.Textbox(label, {
+      left: left + 8,
+      top: top + 18,
+      width: 80,
+      fontSize: 10,
+      fill: '#ffffff',
+      fontFamily: 'Segoe UI',
+      textAlign: 'center',
+      selectable: false,
+      evented: false
+    })
+    const group = new fabricLib.Group([rect, text], {
+      left,
+      top,
+      selectable: true,
+      hasControls: true,
+      hasBorders: true
+    })
+    group.metadataType = 'furnitureToken'
+    group.furnitureLabel = label
+    c.add(group)
+    c.setActiveObject(group)
+    c.requestRenderAll()
+    setDropHint(`Placed: ${label}`)
+    setTimeout(() => setDropHint('Drag a catalog item here to place it on the canvas'), 1800)
+  }
+
+  function handleCanvasDragOver(e) {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'copy'
+  }
+
+  function handleCanvasDrop(e) {
+    e.preventDefault()
+    const c = fabricRef.current
+    const fabricLib = fabricLibRef.current
+    if (!c || !fabricLib) return
+    try {
+      const raw = e.dataTransfer.getData('text/plain')
+      if (!raw) return
+      const item = JSON.parse(raw)
+      const rect = canvasRef.current.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width) * c.getWidth()
+      const y = ((e.clientY - rect.top) / rect.height) * c.getHeight()
+      addDroppedCatalogItem(item, x, y)
+    } catch (err) {
+      console.warn(err)
+    }
+  }
+
+  async function handleApplyAiRecolor() {
+    const c = fabricRef.current
+    const selected = layers.find((l) => l.id === selectedLayerId)
+    if (!selected) {
+      alert('Select a region in the layers list first')
+      return
+    }
+    if (!image) {
+      alert('Upload a room photo first')
+      return
+    }
+
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:5000'
+    try {
+      const regionName = String(selected.regionName || selected.name || 'wall').toLowerCase()
+      const safeRegion = ['wall', 'floor', 'sofa', 'table', 'lamp', 'furniture'].includes(regionName) ? regionName : 'wall'
+      const res = await fetch(`${API_BASE}/api/recolor`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Client-ID': clientId || ''
+        },
+        body: JSON.stringify({
+          imageData: image,
+          region: safeRegion,
+          targetColor: targetColorRef.current,
+          clientId
+        })
+      })
+      if (!res.ok) throw new Error('Recolor failed')
+      const payload = await res.json()
+      replaceBackgroundWithDataUrl(payload.previewUrl)
+    } catch (err) {
+      console.warn(err)
+      alert('AI recolor failed — check backend logs')
+    }
   }
 
   // Layer controls
@@ -509,19 +694,25 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
   }
 
   function applyGlobalHSL() {
-    // Use CSS filter for live preview only
-    const el = canvasRef.current
-    if (!el) return
-    el.style.filter = `hue-rotate(${hue}deg) saturate(${saturate}) brightness(${lightness})`
+    updateVisualFilter()
+  }
+
+  function updateVisualFilter() {
+    const current = hslRef.current
+    const filterValue = `hue-rotate(${current.hue}deg) saturate(${current.saturate}) brightness(${current.lightness})`
+    const underlayEl = underlayRef.current
+    const canvasEl = fabricRef.current?.upperCanvasEl || canvasRef.current
+    if (underlayEl) underlayEl.style.filter = filterValue
+    if (canvasEl) canvasEl.style.filter = filterValue
   }
 
   return (
     <div className="canvas-wrap">
-      <div className="canvas-controls canvas-controls-v2" style={{ marginBottom: 8 }}>
+      <div className="canvas-controls canvas-controls-v2 canvas-controls-full" style={{ marginBottom: 8 }}>
         <div className="primary-controls-v2">
           <label>Target color: <input type="color" value={targetColor} onChange={(e) => { setTargetColor(e.target.value); propSetTargetColor && propSetTargetColor(e.target.value) }} /></label>
           <button type="button" onClick={() => setPicking(true)}>Pick area to recolor</button>
-          <button type="button" onClick={() => { enableBrushMode(true); setTimeout(() => enableBrushMode(true), 50) }}>Brush Mask</button>
+          <button type="button" onClick={() => enableBrushMode(!brushMode)}>{brushMode ? 'Brush Mask: On' : 'Brush Mask: Off'}</button>
           <button type="button" onClick={exportImage}>Download PNG</button>
           <button type="button" onClick={copyShareCode}>Copy Share JSON</button>
         </div>
@@ -531,7 +722,7 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
           <div className="advanced-controls-grid-v2">
             <label className="toggle-row-v2">Segmentation overlay: <input type="checkbox" checked={overlayVisible} onChange={(e) => setOverlayVisible(e.target.checked)} /></label>
             <label>Overlay opacity: <input type="range" min="0" max="1" step="0.05" value={overlayOpacity} onChange={(e) => setOverlayOpacity(parseFloat(e.target.value))} /></label>
-            <label>Brush size: <input type="range" min="4" max="48" defaultValue={18} onChange={(e) => { const c = fabricRef.current; if (c) { c.freeDrawingBrush.width = parseInt(e.target.value, 10) } }} /></label>
+            <label>Brush size: <input type="range" min="4" max="48" value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value, 10))} /></label>
             <label>Hue <input type="range" min="-180" max="180" value={hue} onChange={(e) => { setHue(parseInt(e.target.value, 10)); setTimeout(applyGlobalHSL, 0) }} /></label>
             <label>Saturation <input type="range" min="0" max="2" step="0.05" value={saturate} onChange={(e) => { setSaturate(parseFloat(e.target.value)); setTimeout(applyGlobalHSL, 0) }} /></label>
             <label>Brightness <input type="range" min="0.5" max="1.8" step="0.05" value={lightness} onChange={(e) => { setLightness(parseFloat(e.target.value)); setTimeout(applyGlobalHSL, 0) }} /></label>
@@ -539,24 +730,28 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
           </div>
         </details>
       </div>
-      <div className="canvas-stage-v2">
-        {image && <img src={image} alt="Uploaded room preview" className="canvas-underlay-v2" />}
+      <div className="canvas-stage-v2" onDragOver={handleCanvasDragOver} onDrop={handleCanvasDrop}>
+        <div className="canvas-stage-hint-v2">{dropHint}</div>
+        {image && <img ref={underlayRef} src={image} alt="Uploaded room preview" className="canvas-underlay-v2" />}
         <canvas id={canvasIdRef.current} ref={canvasRef} className="canvas-overlay-v2" />
       </div>
       <div className="layers-panel-v2">
         <h4>Editable Regions</h4>
+        <div className="layers-help-v2">Select a region, change its color, or apply AI recolor to the chosen area.</div>
         <div className="layers-list-v2">
           {layers.length === 0 ? (
             <div className="layers-empty-v2">No editable regions detected yet.</div>
           ) : (
             layers.map((l) => (
-              <div key={l.id} className="layer-row-v2">
+              <div key={l.id} className={`layer-row-v2 ${selectedLayerId === l.id ? 'layer-selected' : ''}`} onClick={() => setSelectedLayerId(l.id)}>
                 <div className="layer-name-v2">{l.name} ({l.type})</div>
                 <input type="color" onChange={(e) => applyOverlayColor(l.id, e.target.value)} />
               </div>
             ))
           )}
         </div>
+        <button type="button" className="btn-v2" style={{ marginTop: 10, width: '100%' }} onClick={handleApplyAiRecolor}>Apply AI Recolor to selected</button>
+
       </div>
       <div className="canvas-actions" />
     </div>

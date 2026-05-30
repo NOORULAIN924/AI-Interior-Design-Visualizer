@@ -1,7 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:5000'
+
 export default function Analytics() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let alive = true
+    async function loadAnalytics() {
+      try {
+        const res = await fetch(`${API_BASE}/api/analytics`)
+        const payload = await res.json()
+        if (!alive) return
+        setData(payload)
+      } catch (err) {
+        console.warn(err)
+        if (alive) setData({ roomsRedesigned: 0, mostUsedThemes: [], mostUsedPalettes: [], favoriteFurnitureStyles: [], topFurnitureCategories: [], projectHistory: [] })
+      } finally {
+        if (alive) setLoading(false)
+      }
+    }
+    loadAnalytics()
+    return () => { alive = false }
+  }, [])
+
+  const roomsRedesigned = data?.roomsRedesigned ?? 0
+  const themeBars = (data?.mostUsedThemes || []).slice(0, 4)
+  const paletteBars = (data?.mostUsedPalettes || []).slice(0, 4)
   return (
     <div className="page page-v2">
       <section className="section-card-v2">
@@ -16,47 +43,58 @@ export default function Analytics() {
         <div className="analytics-grid-v2">
           <article className="metric-card-v2">
             <h3>Total redesign sessions</h3>
-            <p className="metric-v2">1,248</p>
-            <span>Last 30 days across all room types</span>
+            <p className="metric-v2">{loading ? '...' : roomsRedesigned}</p>
+            <span>Computed from saved design payloads</span>
           </article>
 
           <article className="metric-card-v2">
-            <h3>Most selected theme</h3>
-            <p className="metric-v2">Mid-Century Modern</p>
-            <span>Used in 31% of generated designs</span>
+            <h3>Most selected themes</h3>
+            <div className="bar-chart-v2">
+              {themeBars.map(([label, count]) => (
+                <div key={label} className="bar-row-v2">
+                  <span>{label}</span>
+                  <div className="bar-track-v2"><div className="bar-fill-v2" style={{ width: `${Math.max(12, Math.min(100, count * 5))}%` }} /></div>
+                </div>
+              ))}
+            </div>
+            <span>{loading ? 'Loading analytics' : 'From design JSON payloads'}</span>
           </article>
 
           <article className="metric-card-v2">
-            <h3>Top room category</h3>
-            <p className="metric-v2">Kitchen</p>
-            <span>Highest completion-to-export rate</span>
+            <h3>Favorite furniture styles</h3>
+            <p className="metric-v2">{loading ? '...' : (data?.favoriteFurnitureStyles?.[0]?.[0] || 'No data')}</p>
+            <span>{loading ? 'Loading analytics' : 'Most frequent catalog style tag'}</span>
           </article>
 
           <article className="metric-card-v2">
             <h3>Palette adoption</h3>
-            <div className="palette-strip-v2">
-              <span className="palette-dot-v2" style={{ background: '#e6dccf' }}></span>
-              <span className="palette-dot-v2" style={{ background: '#c2d0d3' }}></span>
-              <span className="palette-dot-v2" style={{ background: '#667f83' }}></span>
-              <span className="palette-dot-v2" style={{ background: '#354248' }}></span>
+            <div className="bar-chart-v2">
+              {paletteBars.map(([label, count]) => (
+                <div key={label} className="bar-row-v2">
+                  <span>{label}</span>
+                  <div className="bar-track-v2"><div className="bar-fill-v2 alt" style={{ width: `${Math.max(12, Math.min(100, count * 5))}%` }} /></div>
+                </div>
+              ))}
             </div>
-            <span>Most reused palette from successful redesigns</span>
+            <span>{loading ? 'Loading analytics' : 'Most reused palette selections from saved designs'}</span>
           </article>
 
           <article className="metric-card-v2 full">
-            <h3>Pipeline readiness checklist</h3>
-            <ul className="checklist-v2">
-              <li>Frontend upload, preview, and comparison flow</li>
-              <li>Interactive recolor + palette assisted controls</li>
-              <li>Share payload export path</li>
-              <li>Production segmentation and style-transfer integration pending</li>
-              <li>Furniture swap UX intentionally deferred until core vision flow is stable</li>
-            </ul>
+            <h3>Project History</h3>
+            <div className="project-grid-v2">
+              {(data?.projectHistory || []).length > 0 ? data.projectHistory.map((project) => (
+                <article key={project.id} className="project-card-v2">
+                  <div className="project-thumb-v2" style={{ background: project.dominantColor || '#1b202b' }} />
+                  <strong>{project.styleTheme || 'Untitled design'}</strong>
+                  <span>{project.createdAt}</span>
+                </article>
+              )) : <p className="section-note-v2">No saved projects yet. Create a redesign to populate analytics.</p>}
+            </div>
           </article>
         </div>
 
         <div className="section-note-v2">
-          Connect this page to real telemetry events once Flask endpoints are integrated.
+          Analytics is computed from saved design JSON files and updates whenever new designs are saved.
         </div>
       </section>
     </div>

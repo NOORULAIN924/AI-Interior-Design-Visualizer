@@ -1,14 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { extractPalette } from '../utils/palette'
+import Catalog from '../components/Catalog'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:5000'
 
-export default function Dashboard({ beforeImage, setBeforeImage, palette, setPalette, targetColor, setTargetColor, designOptions, setDesignOptions }) {
+export default function Dashboard({ uiConfig, beforeImage, setBeforeImage, palette, setPalette, targetColor, setTargetColor, designOptions, setDesignOptions }) {
   const navigate = useNavigate()
-  const [designTheme, setDesignTheme] = useState(designOptions?.designTheme || 'Mid-Century Modern')
-  const [roomType, setRoomType] = useState(designOptions?.roomType || 'Kitchen')
+  const isMountedRef = useRef(true)
+  const [designTheme, setDesignTheme] = useState(designOptions?.designTheme || '')
+  const [roomType, setRoomType] = useState(designOptions?.roomType || '')
   const [paletteSuggestions, setPaletteSuggestions] = useState([])
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!uiConfig) return
+    setDesignTheme((prev) => prev || uiConfig.defaultTheme || '')
+    setRoomType((prev) => prev || uiConfig.roomTypes?.[0] || '')
+  }, [uiConfig])
 
   async function handleUpload(e) {
     const file = e.target.files && e.target.files[0]
@@ -17,6 +30,12 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
     reader.onload = async (ev) => {
       const dataUrl = ev.target.result
       setBeforeImage && setBeforeImage(dataUrl)
+      setDesignOptions && setDesignOptions({
+        designTheme,
+        roomType,
+        generatedAt: Date.now()
+      })
+      navigate('/results')
       if (setPalette) {
         try {
           const res = await fetch(`${API_BASE}/api/palette`, {
@@ -28,20 +47,18 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
             const payload = await res.json()
             const p = (payload.roomPalette?.swatches || []).slice(0, 6).map((sw) => sw.hex)
             setPalette(p)
-            setPaletteSuggestions(payload.recommendations || [])
+            if (isMountedRef.current) {
+              setPaletteSuggestions(payload.recommendations || [])
+            }
           } else {
-            const p = await extractPalette(dataUrl, 6)
-            setPalette(p)
-            setPaletteSuggestions([])
+            if (isMountedRef.current) {
+              setPaletteSuggestions([])
+            }
           }
         } catch (err) {
           console.warn(err)
-          try {
-            const p = await extractPalette(dataUrl, 6)
-            setPalette(p)
+          if (isMountedRef.current) {
             setPaletteSuggestions([])
-          } catch (innerErr) {
-            console.warn(innerErr)
           }
         }
       }
@@ -67,27 +84,24 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
     <div className="page page-v2">
       <section className="dash-main-v2">
         <div className="dash-top-card-v2">
-          <h3>Upload a room photo, segment the space, swap furniture, and preview the redesign in the browser</h3>
+          <h3>Upload a room photo and the app will open Results automatically with a generated redesign preview</h3>
+          <p className="result-note-v2">Your uploaded photo is the source image for segmentation, palette extraction, and the AI redesign preview.</p>
 
           <div className="dash-row-v2">
             <label className="dash-field-v2">
               <span>Design Theme</span>
               <select value={designTheme} onChange={(e) => setDesignTheme(e.target.value)}>
-                <option>Mid-Century Modern</option>
-                <option>Scandinavian</option>
-                <option>Minimal Contemporary</option>
-                <option>Japandi</option>
-                <option>Industrial</option>
+                {(uiConfig?.styleThemes || []).map((theme) => (
+                  <option key={theme.key} value={theme.key}>{theme.label}</option>
+                ))}
               </select>
             </label>
             <label className="dash-field-v2">
               <span>Room Type</span>
               <select value={roomType} onChange={(e) => setRoomType(e.target.value)}>
-                <option>Kitchen</option>
-                <option>Living Room</option>
-                <option>Bedroom</option>
-                <option>Bathroom</option>
-                <option>Office</option>
+                {(uiConfig?.roomTypes || []).map((room) => (
+                  <option key={room} value={room}>{room}</option>
+                ))}
               </select>
             </label>
           </div>
@@ -125,6 +139,12 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
               )}
             </div>
           </div>
+
+          <div className="style-block-v2">
+            <div className="style-head-v2">Furniture catalog</div>
+            <p>Drag catalog items into the canvas once the workspace is loaded.</p>
+            <Catalog items={uiConfig?.catalog || []} />
+          </div>
         </div>
 
         <div className="compare-wrap-v2">
@@ -139,12 +159,12 @@ export default function Dashboard({ beforeImage, setBeforeImage, palette, setPal
 
           <div className="compare-grid-v2">
             <div className="compare-pane-v2">
-              {beforeImage ? <img src={beforeImage} alt="Before" /> : <div className="img-empty-v2">Upload a room photo</div>}
-              <div className="pane-label-v2">Before</div>
+              {beforeImage ? <img src={beforeImage} alt="Before image" /> : <div className="img-empty-v2">Upload a room photo</div>}
+              <div className="pane-label-v2">Before · uploaded photo</div>
             </div>
             <div className="compare-pane-v2 after">
-              {beforeImage ? <img src={beforeImage} alt="After" /> : <div className="img-empty-v2">Generated design preview</div>}
-              <div className="pane-label-v2">After · {designTheme}</div>
+              <div className="img-empty-v2">Generated design preview will open on the Results page</div>
+              <div className="pane-label-v2">After · AI preview · {designTheme}</div>
             </div>
           </div>
         </div>

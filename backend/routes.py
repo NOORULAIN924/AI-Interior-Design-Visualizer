@@ -8,7 +8,7 @@ import numpy as np
 from flask import Blueprint, Flask, jsonify, request, send_from_directory
 from PIL import Image
 
-from backend.config import OUTPUT_DIR, PREVIEW_DIR, UPLOAD_DIR, ensure_storage_dirs
+from backend.config import FURNITURE_CATALOG, OUTPUT_DIR, PREVIEW_DIR, STYLE_THEMES, UPLOAD_DIR, ensure_storage_dirs
 from backend.services.image_service import parse_image_request
 from backend.services.palette_service import extract_palette, suggest_wall_palettes
 from backend.services.redesign_service import apply_style_theme, build_design_payload
@@ -16,10 +16,31 @@ from backend.services import segmentation_service
 from backend.services.storage_service import load_design_payload, save_design_payload
 from backend.services.palette_service import generate_recommendation_palettes
 from backend.services.redesign_service import recolor_region_preserve_lighting
-import cv2
+from backend.services.analytics_service import compute_analytics
+from backend.realtime import emit_to_client
+from backend.services.palette_service import rgb_to_hex
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
+
+ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Office", "Bathroom", "Dining Room"]
+
+
+def _client_id_from_request(body: dict[str, Any] | None = None) -> str | None:
+    body = body or {}
+    return request.headers.get("X-Client-ID") or request.args.get("clientId") or body.get("clientId")
+
+
+def _theme_options() -> list[dict[str, Any]]:
+    options: list[dict[str, Any]] = []
+    for key, theme in STYLE_THEMES.items():
+        options.append({
+            "key": key,
+            "label": key.replace("_", " ").title(),
+            "wall": rgb_to_hex(theme.get("wall", [238, 232, 222])),
+            "accent": rgb_to_hex(theme.get("accent", [124, 145, 133])),
+        })
+    return options
 
 
 def make_design_id() -> str:
@@ -63,6 +84,29 @@ def health():
     })
 
 
+@api.route("/ui-config", methods=["GET"])
+def ui_config():
+    themes = _theme_options()
+    default_theme = themes[0]["key"] if themes else "japandi"
+    default_target_color = themes[0]["wall"] if themes else "#e8dfd5"
+    return jsonify({
+        "styleThemes": themes,
+        "roomTypes": ROOM_TYPES,
+        "catalog": FURNITURE_CATALOG,
+        "defaultTheme": default_theme,
+        "defaultTargetColor": default_target_color,
+    })
+
+
+@api.route("/analytics", methods=["GET"])
+def analytics():
+    try:
+        ensure_storage_dirs()
+        return jsonify(compute_analytics(OUTPUT_DIR))
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
 @api.route("/palette", methods=["POST"])
 def palette():
     try:
@@ -93,12 +137,14 @@ def redesign():
         ensure_storage_dirs()
 
         body = request.get_json(silent=True) or {}
+        client_id = _client_id_from_request(body)
         selected_theme = body.get("styleTheme") or body.get("theme") or "japandi"
         wall_override = body.get("wallColor") or body.get("targetColor")
 
         image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
 
         height, width = image_rgb.shape[:2]
+        emit_to_client("segmentation_started", {"clientId": client_id, "stage": "segment", "progress": 0}, client_id)
         # segmentation: attempt model-backed masks, fall back to deterministic masks
         try:
             masks = segmentation_service.build_room_masks_from_model(image_rgb)
@@ -106,12 +152,25 @@ def redesign():
                 masks = segmentation_service.build_fallback_masks(height, width)
         except Exception:
             masks = segmentation_service.build_fallback_masks(height, width)
+        emit_to_client("segmentation_progress", {"clientId": client_id, "stage": "segment", "progress": 60}, client_id)
 
         vector_layers: dict[str, list[dict[str, Any]]] = {
             name: segmentation_service.mask_to_vector_layers(mask, name)
             for name, mask in masks.items()
         }
+        emit_to_client(
+            "segmentation_done",
+            {
+                "clientId": client_id,
+                "stage": "segment",
+                "progress": 100,
+                "vectorLayers": vector_layers,
+                "previewPartial": add_api_prefix_to_url(image_source.get("url")),
+            },
+            client_id,
+        )
 
+        emit_to_client("recolor_started", {"clientId": client_id, "stage": "recolor", "progress": 0}, client_id)
         room_palette = extract_palette(image_rgb, k=5)
         palette_suggestions = suggest_wall_palettes(room_palette)
 
@@ -145,6 +204,18 @@ def redesign():
             preview_url = f"/api/previews/{preview_ref}"
             payload["previewUrl"] = preview_url
 
+        emit_to_client(
+            "recolor_done",
+            {
+                "clientId": client_id,
+                "stage": "recolor",
+                "progress": 100,
+                "previewUrl": preview_url,
+                "designId": design_id,
+            },
+            client_id,
+        )
+
         save_design_payload(payload, OUTPUT_DIR)
 
         return jsonify({
@@ -169,6 +240,9 @@ def redesign():
 def segment():
     try:
         ensure_storage_dirs()
+        body = request.get_json(silent=True) or {}
+        client_id = _client_id_from_request(body)
+        emit_to_client("segmentation_started", {"clientId": client_id, "stage": "segment", "progress": 0}, client_id)
         image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
 
         height, width = image_rgb.shape[:2]
@@ -178,11 +252,24 @@ def segment():
                 masks = segmentation_service.build_fallback_masks(height, width)
         except Exception:
             masks = segmentation_service.build_fallback_masks(height, width)
+        emit_to_client("segmentation_progress", {"clientId": client_id, "stage": "segment", "progress": 70}, client_id)
 
         vector_layers: dict[str, list[dict[str, Any]]] = {
             name: segmentation_service.mask_to_vector_layers(mask, name)
             for name, mask in masks.items()
         }
+
+        emit_to_client(
+            "segmentation_done",
+            {
+                "clientId": client_id,
+                "stage": "segment",
+                "progress": 100,
+                "vectorLayers": vector_layers,
+                "previewPartial": add_api_prefix_to_url(image_source.get("url")),
+            },
+            client_id,
+        )
 
         image_source["url"] = add_api_prefix_to_url(image_source.get("url"))
 
@@ -209,8 +296,10 @@ def recolor():
     try:
         ensure_storage_dirs()
         # accepts multipart 'image' or JSON 'imageData' and params: region (wall/floor/etc), targetColor
-        image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
         body = request.get_json(silent=True) or {}
+        client_id = _client_id_from_request(body)
+        emit_to_client("recolor_started", {"clientId": client_id, "stage": "recolor", "progress": 0}, client_id)
+        image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
         region = body.get('region') or request.form.get('region') or 'wall'
         target = body.get('targetColor') or request.form.get('targetColor')
         if not target:
@@ -239,8 +328,20 @@ def recolor():
         buff = BytesIO()
         Image.fromarray(recolored).save(buff, format='PNG')
         b64 = base64.b64encode(buff.getvalue()).decode('ascii')
+        preview_url = f'data:image/png;base64,{b64}'
+        emit_to_client(
+            "recolor_done",
+            {
+                "clientId": client_id,
+                "stage": "recolor",
+                "progress": 100,
+                "previewUrl": preview_url,
+                "region": region,
+            },
+            client_id,
+        )
         return jsonify({
-            'previewUrl': f'data:image/png;base64,{b64}',
+            'previewUrl': preview_url,
             'region': region
         })
     except Exception as exc:

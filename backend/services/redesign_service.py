@@ -6,6 +6,53 @@ import numpy as np
 
 from backend.config import FURNITURE_CATALOG, STYLE_THEMES
 from backend.services.palette_service import hex_to_rgb
+import cv2
+
+
+def recolor_region_preserve_lighting(image_rgb: np.ndarray, mask: np.ndarray, target_rgb: list[int] | np.ndarray, strength: float = 1.0) -> np.ndarray:
+    """Recolor the masked region by shifting hue/saturation towards target while preserving value (lighting).
+
+    strength: 0..1 interpolation toward target H/S. 1 applies full target hue/sat.
+    """
+    if mask.dtype != np.bool_:  # allow boolean mask
+        mask_bool = mask.astype(bool)
+    else:
+        mask_bool = mask
+
+    # Convert to HSV (cv2 uses H:0-179, S:0-255, V:0-255)
+    img_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV).astype(np.float32)
+
+    # target HSV
+    t_rgb = np.array(target_rgb, dtype=np.uint8).reshape(1, 1, 3)
+    t_hsv = cv2.cvtColor(cv2.cvtColor(t_rgb, cv2.COLOR_RGB2BGR), cv2.COLOR_BGR2HSV).astype(np.float32)[0, 0]
+
+    # Normalize H to 0-1 for interpolation; but we will operate on 0-179 space
+    h_t, s_t = t_hsv[0], t_hsv[1]
+
+    # apply interpolation only on masked pixels
+    hs = hsv[..., :2]
+    v = hsv[..., 2]
+
+    # interpolate hue circularly
+    h = hs[..., 0]
+    dh = (h_t - h + 180) % 180 - 180 * (h_t < h)
+    h_new = (h + dh * strength) % 180
+    s_new = hs[..., 1] * (1.0 - strength) + s_t * strength
+
+    hsv[..., 0] = np.where(mask_bool, h_new, h)
+    hsv[..., 1] = np.where(mask_bool, s_new, hs[..., 1])
+
+    # convert back
+    hsv = np.clip(hsv, 0, 255).astype(np.uint8)
+    bgr2 = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+    result_rgb = cv2.cvtColor(bgr2, cv2.COLOR_BGR2RGB)
+
+    # blend with original to allow partial strength (preserve edges)
+    out = image_rgb.copy().astype(np.float32)
+    mask3 = np.stack([mask_bool]*3, axis=-1)
+    out[mask3] = out[mask3] * (1.0 - strength) + result_rgb[mask3] * strength
+    return np.clip(out, 0, 255).astype(np.uint8)
 
 
 def apply_tint(image_rgb: np.ndarray, mask: np.ndarray, target_rgb: list[int] | np.ndarray, strength: float = 0.68) -> np.ndarray:

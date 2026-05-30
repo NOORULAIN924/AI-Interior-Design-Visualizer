@@ -12,8 +12,11 @@ from backend.config import OUTPUT_DIR, PREVIEW_DIR, UPLOAD_DIR, ensure_storage_d
 from backend.services.image_service import parse_image_request
 from backend.services.palette_service import extract_palette, suggest_wall_palettes
 from backend.services.redesign_service import apply_style_theme, build_design_payload
-from backend.services.segmentation_service import build_fallback_masks, mask_to_vector_layers
+from backend.services import segmentation_service
 from backend.services.storage_service import load_design_payload, save_design_payload
+from backend.services.palette_service import generate_recommendation_palettes
+from backend.services.redesign_service import recolor_region_preserve_lighting
+import cv2
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -25,10 +28,21 @@ def make_design_id() -> str:
 
 def save_preview_image(image_rgb: np.ndarray, design_id: str) -> str:
     ensure_storage_dirs()
-    filename = f"preview_{design_id}.png"
-    path = PREVIEW_DIR / filename
-    Image.fromarray(image_rgb).save(path)
-    return filename
+    from io import BytesIO
+    import base64
+
+    # If configured to persist previews, save to PREVIEW_DIR and return filename.
+    if getattr(__import__('backend.config'), 'SAVE_PREVIEWS', False):
+        filename = f"preview_{design_id}.png"
+        path = PREVIEW_DIR / filename
+        Image.fromarray(image_rgb).save(path)
+        return filename
+
+    # Otherwise, return a data URL so frontend can load without touching disk.
+    buff = BytesIO()
+    Image.fromarray(image_rgb).save(buff, format='PNG')
+    b64 = base64.b64encode(buff.getvalue()).decode('ascii')
+    return f"data:image/png;base64,{b64}"
 
 
 def add_api_prefix_to_url(url: str | None) -> str | None:
@@ -85,10 +99,16 @@ def redesign():
         image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
 
         height, width = image_rgb.shape[:2]
-        masks = build_fallback_masks(height, width)
+        # segmentation: attempt model-backed masks, fall back to deterministic masks
+        try:
+            masks = segmentation_service.build_room_masks_from_model(image_rgb)
+            if masks is None:
+                masks = segmentation_service.build_fallback_masks(height, width)
+        except Exception:
+            masks = segmentation_service.build_fallback_masks(height, width)
 
         vector_layers: dict[str, list[dict[str, Any]]] = {
-            name: mask_to_vector_layers(mask, name)
+            name: segmentation_service.mask_to_vector_layers(mask, name)
             for name, mask in masks.items()
         }
 
@@ -103,7 +123,7 @@ def redesign():
         )
 
         design_id = make_design_id()
-        preview_filename = save_preview_image(redesigned_rgb, design_id)
+        preview_ref = save_preview_image(redesigned_rgb, design_id)
 
         image_source["url"] = add_api_prefix_to_url(image_source.get("url"))
 
@@ -117,15 +137,20 @@ def redesign():
             palette_suggestions=palette_suggestions,
             selected_theme=selected_theme,
         )
-
-        payload["previewUrl"] = f"/api/previews/{preview_filename}"
+        # preview_ref may be a filename or a data URL depending on config
+        if isinstance(preview_ref, str) and preview_ref.startswith("data:image"):
+            preview_url = preview_ref
+            payload["previewUrl"] = preview_url
+        else:
+            preview_url = f"/api/previews/{preview_ref}"
+            payload["previewUrl"] = preview_url
 
         save_design_payload(payload, OUTPUT_DIR)
 
         return jsonify({
             "id": design_id,
             "designId": design_id,
-            "previewUrl": f"/api/previews/{preview_filename}",
+            "previewUrl": preview_url,
             "imageUrl": image_source.get("url"),
             "roomPalette": room_palette,
             "recommendations": palette_suggestions,
@@ -147,10 +172,15 @@ def segment():
         image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
 
         height, width = image_rgb.shape[:2]
-        masks = build_fallback_masks(height, width)
+        try:
+            masks = segmentation_service.build_room_masks_from_model(image_rgb)
+            if masks is None:
+                masks = segmentation_service.build_fallback_masks(height, width)
+        except Exception:
+            masks = segmentation_service.build_fallback_masks(height, width)
 
         vector_layers: dict[str, list[dict[str, Any]]] = {
-            name: mask_to_vector_layers(mask, name)
+            name: segmentation_service.mask_to_vector_layers(mask, name)
             for name, mask in masks.items()
         }
 
@@ -172,6 +202,62 @@ def segment():
         return jsonify({
             "error": str(exc)
         }), 400
+
+
+@api.route("/recolor", methods=["POST"])
+def recolor():
+    try:
+        ensure_storage_dirs()
+        # accepts multipart 'image' or JSON 'imageData' and params: region (wall/floor/etc), targetColor
+        image_rgb, image_source = parse_image_request(request, UPLOAD_DIR)
+        body = request.get_json(silent=True) or {}
+        region = body.get('region') or request.form.get('region') or 'wall'
+        target = body.get('targetColor') or request.form.get('targetColor')
+        if not target:
+            raise ValueError('Provide targetColor as hex string like #aabbcc')
+
+        # Ensure we have segmentation masks for region
+        try:
+            masks = segmentation_service.build_room_masks_from_model(image_rgb)
+            if masks is None:
+                masks = segmentation_service.build_fallback_masks(image_rgb.shape[0], image_rgb.shape[1])
+        except Exception:
+            masks = segmentation_service.build_fallback_masks(image_rgb.shape[0], image_rgb.shape[1])
+
+        if region not in masks:
+            raise ValueError(f'Region "{region}" not found in segmentation masks')
+
+        mask = masks[region]
+        from backend.services.palette_service import hex_to_rgb
+        tgt_rgb = hex_to_rgb(target)
+
+        recolored = recolor_region_preserve_lighting(image_rgb, mask, tgt_rgb.tolist(), strength=1.0)
+
+        # return data URL (do not persist unless configured)
+        from io import BytesIO
+        import base64
+        buff = BytesIO()
+        Image.fromarray(recolored).save(buff, format='PNG')
+        b64 = base64.b64encode(buff.getvalue()).decode('ascii')
+        return jsonify({
+            'previewUrl': f'data:image/png;base64,{b64}',
+            'region': region
+        })
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 400
+
+
+@api.route('/recommend', methods=['POST'])
+def recommend():
+    try:
+        body = request.get_json(silent=True) or {}
+        base = body.get('baseColor') or body.get('color')
+        if not base:
+            return jsonify({'error': 'Provide baseColor hex in JSON body'}), 400
+        palettes = generate_recommendation_palettes(base)
+        return jsonify({'base': base, 'palettes': palettes})
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 400
 
 
 @api.route("/designs/save", methods=["POST"])

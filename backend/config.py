@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+import os
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 BACKEND_DIR = PROJECT_ROOT / "backend"
@@ -9,6 +10,11 @@ STORAGE_DIR = BACKEND_DIR / "storage"
 UPLOAD_DIR = STORAGE_DIR / "uploads"
 PREVIEW_DIR = STORAGE_DIR / "previews"
 OUTPUT_DIR = PROJECT_ROOT / "notebooks" / "outputs"
+
+# Control whether preview images are persisted to the repository storage folder.
+# Set environment variable SAVE_PREVIEWS=1 to enable saving; default is disabled
+# to avoid cluttering the project folder during development.
+SAVE_PREVIEWS = os.environ.get("SAVE_PREVIEWS", "0") in ("1", "true", "True")
 
 
 STYLE_THEMES: dict[str, dict[str, list[int]]] = {
@@ -71,5 +77,8 @@ FURNITURE_CATALOG: list[dict[str, Any]] = [
 
 
 def ensure_storage_dirs() -> None:
-    for folder in [UPLOAD_DIR, PREVIEW_DIR, OUTPUT_DIR]:
+    folders = [UPLOAD_DIR, OUTPUT_DIR]
+    if SAVE_PREVIEWS:
+        folders.insert(1, PREVIEW_DIR)
+    for folder in folders:
         folder.mkdir(parents=True, exist_ok=True)

@@ -7,18 +7,40 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
   const canvasIdRef = useRef(`canvas-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)
   const [targetColor, setTargetColor] = useState(propTargetColor || '#dba')
   const [picking, setPicking] = useState(false)
-  const [overlayVisible, setOverlayVisible] = useState(true)
-  const [overlayOpacity, setOverlayOpacity] = useState(0.6)
+  const [overlayVisible, setOverlayVisible] = useState(false)
+  const [overlayOpacity, setOverlayOpacity] = useState(0.22)
   const [layers, setLayers] = useState([])
   const [hue, setHue] = useState(0)
   const [saturate, setSaturate] = useState(1)
   const [lightness, setLightness] = useState(1)
   const [fabricReady, setFabricReady] = useState(false)
   const [showAdvanced, setShowAdvanced] = useState(false)
+  const pickingRef = useRef(false)
+  const targetColorRef = useRef(targetColor)
+  const overlayVisibleRef = useRef(false)
+  const overlayOpacityRef = useRef(0.22)
 
   useEffect(() => {
     if (propTargetColor) setTargetColor(propTargetColor)
   }, [propTargetColor])
+
+  useEffect(() => {
+    targetColorRef.current = targetColor
+  }, [targetColor])
+
+  useEffect(() => {
+    pickingRef.current = picking
+  }, [picking])
+
+  useEffect(() => {
+    overlayVisibleRef.current = overlayVisible
+    toggleOverlay(overlayVisible)
+  }, [overlayVisible])
+
+  useEffect(() => {
+    overlayOpacityRef.current = overlayOpacity
+    updateOverlayOpacity(overlayOpacity)
+  }, [overlayOpacity])
 
   useEffect(() => {
     let c = null
@@ -34,20 +56,22 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
       if (!mounted) return
       const fabricLib = fabricLibRef.current
 
-      c = new fabricLib.Canvas(canvasRef.current, { backgroundColor: '#fff', preserveObjectStacking: true })
+      // use transparent canvas background so the DOM underlay image shows through
+      c = new fabricLib.Canvas(canvasRef.current, { backgroundColor: 'transparent', preserveObjectStacking: true })
       fabricRef.current = c
       setFabricReady(true)
 
       function refreshLayers() {
         if (!c) return
         const objs = c.getObjects().map((o, idx) => {
+          const isMaskLike = !!(o.isSegOverlay || o.isMask || o.isBackendMask)
           return {
             id: o._maskId || (`o-${idx}`),
-            type: o.isSegOverlay ? 'mask' : (o._isBackgroundImage ? 'background' : (o.type || 'object')),
-            name: o.isSegOverlay ? 'Segment' : (o._isBackgroundImage ? 'Background' : (o.name || o.type || 'Object')),
+            type: isMaskLike ? 'mask' : (o._isBackgroundImage ? 'background' : (o.type || 'object')),
+            name: isMaskLike ? (o.regionName || 'Segment') : (o._isBackgroundImage ? 'Background' : (o.name || o.type || 'Object')),
             refIndex: idx
           }
-        }).filter(l => l.type !== 'background')
+        }).filter(l => l.type === 'mask')
         setLayers(objs)
       }
       c.on('object:added', refreshLayers)
@@ -68,35 +92,9 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
       resize()
       window.addEventListener('resize', resize)
 
-      // accept drops from catalog
-      function onDrop(e) {
-        e.preventDefault()
-        const data = e.dataTransfer.getData('text/plain')
-        try {
-          const item = JSON.parse(data)
-          if (item.src) {
-            fabricLib.Image.fromURL(item.src, img => {
-              img.set({ left: 50, top: 50, scaleX: 1, scaleY: 1 })
-              img.scaleToWidth(200)
-              c.add(img)
-              c.setActiveObject(img)
-              c.requestRenderAll()
-            }, { crossOrigin: 'anonymous' })
-          } else {
-            const rect = new fabricLib.Rect({ width: 120, height: 80, fill: '#ddd' })
-            const txt = new fabricLib.Text(item.name, { left: 10, top: 30 })
-            const group = new fabricLib.Group([rect, txt], { left: 50, top: 50 })
-            c.add(group)
-          }
-        } catch (err) { console.warn(err) }
-      }
-      function onDragOver(e) { e.preventDefault() }
-      el.addEventListener('drop', onDrop)
-      el.addEventListener('dragover', onDragOver)
-
       // click handler for picking source color on background image
       function onCanvasClick(opt) {
-        if (!picking) return
+        if (!pickingRef.current) return
         const pointer = c.getPointer(opt.e)
         const bg = getBackgroundImage(c)
         if (!bg) return
@@ -104,9 +102,9 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
           // perform recolor (if mask present, use mask)
           const maskObjects = c.getObjects().filter(o => o.isMask)
           if (maskObjects.length > 0) {
-            applyColorReplaceWithMask(c, bg, srcColor, hexToRgb(targetColor), maskObjects)
+            applyColorReplaceWithMask(c, bg, srcColor, hexToRgb(targetColorRef.current), maskObjects)
           } else {
-            applyColorReplaceToBackground(c, bg, srcColor, hexToRgb(targetColor))
+            applyColorReplaceToBackground(c, bg, srcColor, hexToRgb(targetColorRef.current))
           }
           setPicking(false)
         })
@@ -130,7 +128,7 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
             fill: color,
             selectable: false,
             evented: false,
-            opacity: overlayOpacity,
+            opacity: overlayOpacityRef.current,
             strokeWidth: 0
           })
           overlay.isSegOverlay = true
@@ -149,8 +147,6 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
 
       // cleanup will remove listeners and dispose canvas
       const cleanup = () => {
-        el.removeEventListener('drop', onDrop)
-        el.removeEventListener('dragover', onDragOver)
         if (c) {
           try { c.off('mouse:down', onCanvasClick) } catch (e) { }
           try { c.off('path:created') } catch (e) { }
@@ -175,7 +171,7 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
       mounted = false
       if (disposer) disposer()
     }
-  }, [picking, targetColor])
+  }, [])
 
   useEffect(() => {
     if (!image) return
@@ -445,11 +441,11 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
 
       const overlayPoly = new fabricLib.Polygon(points, {
         fill: getRegionColor(region),
-        opacity: overlayOpacity,
+        opacity: overlayOpacityRef.current,
         selectable: false,
         evented: false,
         strokeWidth: 0,
-        visible: overlayVisible
+        visible: overlayVisibleRef.current
       })
       overlayPoly.isSegOverlay = true
       overlayPoly.isBackendSegment = true
@@ -533,8 +529,8 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
         <details className="advanced-controls-v2" open={showAdvanced} onToggle={(e) => setShowAdvanced(e.currentTarget.open)}>
           <summary>Customization</summary>
           <div className="advanced-controls-grid-v2">
-            <label className="toggle-row-v2">Segmentation overlay: <input type="checkbox" checked={overlayVisible} onChange={(e) => { setOverlayVisible(e.target.checked); toggleOverlay(e.target.checked) }} /></label>
-            <label>Overlay opacity: <input type="range" min="0" max="1" step="0.05" value={overlayOpacity} onChange={(e) => { const v = parseFloat(e.target.value); setOverlayOpacity(v); updateOverlayOpacity(v) }} /></label>
+            <label className="toggle-row-v2">Segmentation overlay: <input type="checkbox" checked={overlayVisible} onChange={(e) => setOverlayVisible(e.target.checked)} /></label>
+            <label>Overlay opacity: <input type="range" min="0" max="1" step="0.05" value={overlayOpacity} onChange={(e) => setOverlayOpacity(parseFloat(e.target.value))} /></label>
             <label>Brush size: <input type="range" min="4" max="48" defaultValue={18} onChange={(e) => { const c = fabricRef.current; if (c) { c.freeDrawingBrush.width = parseInt(e.target.value, 10) } }} /></label>
             <label>Hue <input type="range" min="-180" max="180" value={hue} onChange={(e) => { setHue(parseInt(e.target.value, 10)); setTimeout(applyGlobalHSL, 0) }} /></label>
             <label>Saturation <input type="range" min="0" max="2" step="0.05" value={saturate} onChange={(e) => { setSaturate(parseFloat(e.target.value)); setTimeout(applyGlobalHSL, 0) }} /></label>
@@ -548,16 +544,15 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
         <canvas id={canvasIdRef.current} ref={canvasRef} className="canvas-overlay-v2" />
       </div>
       <div className="layers-panel-v2">
-        <h4>Layers</h4>
+        <h4>Editable Regions</h4>
         <div className="layers-list-v2">
           {layers.length === 0 ? (
-            <div className="layers-empty-v2">No segments or furniture have been added yet.</div>
+            <div className="layers-empty-v2">No editable regions detected yet.</div>
           ) : (
             layers.map((l) => (
               <div key={l.id} className="layer-row-v2">
                 <div className="layer-name-v2">{l.name} ({l.type})</div>
-                {l.type === 'mask' && <input type="color" onChange={(e) => applyOverlayColor(l.id, e.target.value)} />}
-                {l.type !== 'mask' && <button type="button" onClick={() => { const url = prompt('Replace furniture image URL'); if (url) replaceActiveFurniture(url) }}>Replace</button>}
+                <input type="color" onChange={(e) => applyOverlayColor(l.id, e.target.value)} />
               </div>
             ))
           )}

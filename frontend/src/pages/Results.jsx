@@ -16,13 +16,21 @@ function mapThemeToApi(theme) {
   return map[normalized] || 'japandi'
 }
 
-export default function Results({ beforeImage, targetColor, designOptions }) {
+export default function Results({ beforeImage, palette = [], targetColor, setTargetColor, designOptions }) {
   const [previewUrl, setPreviewUrl] = useState('')
   const [editableImage, setEditableImage] = useState('')
   const [previewFailed, setPreviewFailed] = useState(false)
   const [segmentLayers, setSegmentLayers] = useState({})
   const [designId, setDesignId] = useState('')
   const [loading, setLoading] = useState(false)
+  const [roomPalette, setRoomPalette] = useState([])
+  const [paletteSuggestions, setPaletteSuggestions] = useState([])
+
+  const topPalette = [...new Set([
+    ...palette,
+    ...roomPalette,
+    ...paletteSuggestions.map((suggestion) => suggestion.wall)
+  ])].filter(Boolean).slice(0, 8)
 
   async function resolveEditableImage(preview, fallback) {
     if (!preview) {
@@ -72,6 +80,8 @@ export default function Results({ beforeImage, targetColor, designOptions }) {
         if (!res.ok) throw new Error('Failed to generate redesign preview')
         const payload = await res.json()
         setDesignId(payload.designId || '')
+        setRoomPalette((payload.roomPalette?.swatches || []).slice(0, 6).map((sw) => sw.hex))
+        setPaletteSuggestions(payload.recommendations || [])
         const absPreview = payload.previewUrl ? `${API_BASE}${payload.previewUrl}` : ''
         setPreviewUrl(absPreview)
         resolveEditableImage(absPreview, beforeImage)
@@ -94,6 +104,8 @@ export default function Results({ beforeImage, targetColor, designOptions }) {
         setEditableImage(beforeImage || '')
         setPreviewFailed(true)
         setSegmentLayers({})
+        setRoomPalette([])
+        setPaletteSuggestions([])
       } finally {
         setLoading(false)
       }
@@ -146,6 +158,24 @@ export default function Results({ beforeImage, targetColor, designOptions }) {
           </div>
         </div>
 
+        <div className="palette-rail-v2">
+          <div className="style-head-v2">Suggested wall colors</div>
+          <div className="palette-strip-v2">
+            {topPalette.length > 0 ? topPalette.map((color) => (
+              <button
+                key={color}
+                type="button"
+                className="palette-dot-v2"
+                style={{ background: color }}
+                title={color}
+                onClick={() => setTargetColor && setTargetColor(color)}
+              />
+            )) : (
+              <span className="palette-hint-v2">Upload a room photo to generate palette suggestions</span>
+            )}
+          </div>
+        </div>
+
         <div className="results-grid-v2">
           <div className="result-pane-v2">
             <h3>Before</h3>
@@ -158,7 +188,48 @@ export default function Results({ beforeImage, targetColor, designOptions }) {
               <>
                 {previewUrl && !previewFailed && <p className="result-note-v2">AI preview loaded. You can keep editing this in the canvas below.</p>}
                 {previewFailed && <p className="result-note-v2">Preview image could not be loaded. Using your uploaded image for editing.</p>}
-                <CanvasView image={editableImage || beforeImage} targetColor={targetColor} segmentLayers={segmentLayers} />
+                <div style={{ marginBottom: 8 }}>
+                  <button type="button" className="btn-v2" onClick={async () => {
+                    // trigger backend recolor for wall
+                    try {
+                      const res = await fetch(`${API_BASE}/api/recolor`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ imageData: beforeImage, region: 'wall', targetColor: targetColor })
+                      })
+                      if (!res.ok) throw new Error('Recolor failed')
+                      const payload = await res.json()
+                      const preview = payload.previewUrl
+                      if (preview) {
+                        setPreviewUrl(preview)
+                        resolveEditableImage(preview, beforeImage)
+                      }
+                    } catch (err) {
+                      console.warn(err)
+                      alert('Recolor failed — check backend logs')
+                    }
+                  }}>Apply AI Recolor</button>
+                  <button type="button" className="btn-v2" onClick={async () => {
+                    if (!targetColor) { alert('Pick a color first'); return }
+                    try {
+                      const res = await fetch(`${API_BASE}/api/recommend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseColor: targetColor }) })
+                      if (!res.ok) throw new Error('Recommend failed')
+                      const data = await res.json()
+                      const p = []
+                      if (data?.palettes) {
+                        // flatten top choices
+                        p.push(data.palettes.complementary[0])
+                        p.push(data.palettes.analogous[0])
+                        p.push(data.palettes.triadic[0])
+                      }
+                      setPaletteSuggestions && setPaletteSuggestions(p)
+                    } catch (err) {
+                      console.warn(err)
+                      alert('Palette recommendation failed')
+                    }
+                  }}>Get Palettes</button>
+                </div>
+                <CanvasView image={editableImage || beforeImage} targetColor={targetColor} setTargetColor={setTargetColor} segmentLayers={segmentLayers} />
               </>
             )}
           </div>

@@ -1,11 +1,11 @@
 # AI Interior Design Visualizer (Frontend + Backend Stubs)
 
-This workspace contains a starter React frontend (Vite + Fabric.js) and a minimal Flask backend with API stubs for upload, palette suggestion and save/share. The frontend implements:
+This workspace contains a structured prototype React frontend (Vite + Fabric.js) and a minimal Flask backend with API stubs for upload, palette suggestion and save/share. The current build implements:
 
 - Side-by-side before/after view
 - Upload panel that posts to the backend
-- Fabric.js canvas with drag-and-drop catalog placeholders
-- Color picker with AI-suggested palette chips
+- Fabric.js canvas for semantic overlay editing and live color exploration
+- Color palette suggestions near the main control area
 - Save/export design (downloads PNG)
 
 Files added:
@@ -32,7 +32,7 @@ npm run dev
 ```
 
 Notes
-- The AI parts (SAM segmentation, style transfer) are stubs here — integrate PyTorch models behind the `/upload` and `/palette` endpoints.
-- The catalog uses placeholder items; replace with real transparent PNGs in `frontend/public/catalog` or serve from a CDN.
+- The AI parts (SAM segmentation, style transfer) are stubs here — integrate PyTorch models behind the `/upload`, `/palette`, and `/redesign` endpoints.
+- Furniture drag-and-drop is intentionally deferred until the core segmentation and redesign flow is stable.
 # AI Interior Design Visualizer
 

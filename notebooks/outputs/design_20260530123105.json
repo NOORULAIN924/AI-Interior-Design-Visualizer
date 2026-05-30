@@ -1,0 +1,436 @@
+{
+  "design": {
+    "beforeAfter": {
+      "afterLabel": "After - modern_luxe",
+      "beforeLabel": "Original"
+    },
+    "catalog": [
+      {
+        "category": "sofa",
+        "id": "sofa-midcentury",
+        "label": "Mid-century sofa",
+        "previewColor": "#7b6d62",
+        "style": "warm modern"
+      },
+      {
+        "category": "chair",
+        "id": "chair-scandi",
+        "label": "Scandinavian lounge chair",
+        "previewColor": "#d9d2c7",
+        "style": "airy minimal"
+      },
+      {
+        "category": "table",
+        "id": "table-wood",
+        "label": "Oak coffee table",
+        "previewColor": "#c8a47d",
+        "style": "natural"
+      },
+      {
+        "category": "lamp",
+        "id": "lamp-arc",
+        "label": "Arc floor lamp",
+        "previewColor": "#b88a5a",
+        "style": "statement"
+      }
+    ],
+    "styleTheme": "modern_luxe"
+  },
+  "frontendContracts": {
+    "fabricLayers": [
+      {
+        "area": 108086.0,
+        "id": "wall-0",
+        "name": "wall",
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            289
+          ],
+          [
+            374,
+            289
+          ],
+          [
+            374,
+            0
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 55352.0,
+        "id": "floor-0",
+        "name": "floor",
+        "points": [
+          [
+            0,
+            351
+          ],
+          [
+            0,
+            499
+          ],
+          [
+            374,
+            499
+          ],
+          [
+            374,
+            351
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 15104.0,
+        "id": "sofa-0",
+        "name": "sofa",
+        "points": [
+          [
+            76,
+            281
+          ],
+          [
+            76,
+            409
+          ],
+          [
+            194,
+            409
+          ],
+          [
+            194,
+            281
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 5694.0,
+        "id": "table-0",
+        "name": "table",
+        "points": [
+          [
+            203,
+            281
+          ],
+          [
+            203,
+            359
+          ],
+          [
+            276,
+            359
+          ],
+          [
+            276,
+            281
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 8400.0,
+        "id": "lamp-0",
+        "name": "lamp",
+        "points": [
+          [
+            286,
+            101
+          ],
+          [
+            286,
+            269
+          ],
+          [
+            336,
+            269
+          ],
+          [
+            336,
+            101
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 5694.0,
+        "id": "furniture-0",
+        "name": "furniture",
+        "points": [
+          [
+            203,
+            281
+          ],
+          [
+            203,
+            359
+          ],
+          [
+            276,
+            359
+          ],
+          [
+            276,
+            281
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 15104.0,
+        "id": "furniture-1",
+        "name": "furniture",
+        "points": [
+          [
+            76,
+            281
+          ],
+          [
+            76,
+            409
+          ],
+          [
+            194,
+            409
+          ],
+          [
+            194,
+            281
+          ]
+        ],
+        "type": "polygon"
+      },
+      {
+        "area": 8400.0,
+        "id": "furniture-2",
+        "name": "furniture",
+        "points": [
+          [
+            286,
+            101
+          ],
+          [
+            286,
+            269
+          ],
+          [
+            336,
+            269
+          ],
+          [
+            336,
+            101
+          ]
+        ],
+        "type": "polygon"
+      }
+    ],
+    "shareableSummary": {
+      "catalogItems": [
+        {
+          "category": "sofa",
+          "id": "sofa-midcentury",
+          "label": "Mid-century sofa",
+          "previewColor": "#7b6d62",
+          "style": "warm modern"
+        },
+        {
+          "category": "chair",
+          "id": "chair-scandi",
+          "label": "Scandinavian lounge chair",
+          "previewColor": "#d9d2c7",
+          "style": "airy minimal"
+        },
+        {
+          "category": "table",
+          "id": "table-wood",
+          "label": "Oak coffee table",
+          "previewColor": "#c8a47d",
+          "style": "natural"
+        },
+        {
+          "category": "lamp",
+          "id": "lamp-arc",
+          "label": "Arc floor lamp",
+          "previewColor": "#b88a5a",
+          "style": "statement"
+        }
+      ],
+      "implementationNote": "Backend uses notebook-aligned prototype logic: fallback segmentation, OpenCV/Numpy palette extraction, and preset-based furniture styling.",
+      "styleTheme": "modern_luxe"
+    }
+  },
+  "id": "20260530123105",
+  "palette": {
+    "activeChoice": {
+      "accent": "#17110c",
+      "name": "Warm Minimal",
+      "trim": "#ffffff",
+      "wall": "#61615c"
+    },
+    "recommendations": [
+      {
+        "accent": "#17110c",
+        "name": "Warm Minimal",
+        "trim": "#ffffff",
+        "wall": "#61615c"
+      },
+      {
+        "accent": "#61615c",
+        "name": "Soft Contrast",
+        "trim": "#f8f3ef",
+        "wall": "#454139"
+      },
+      {
+        "accent": "#8ea3a0",
+        "name": "Calm Studio",
+        "trim": "#f4f1ed",
+        "wall": "#e8dfd5"
+      }
+    ],
+    "roomPalette": {
+      "kmeansCompactness": 145712642.14696902,
+      "regionPixelCount": 187500,
+      "roles": {
+        "accent": {
+          "swatch": {
+            "hex": "#17110c",
+            "rank": 2,
+            "rgb": [
+              23,
+              17,
+              12
+            ],
+            "share": 0.2049
+          },
+          "weight": 10
+        },
+        "dominant": {
+          "swatch": {
+            "hex": "#61615c",
+            "rank": 0,
+            "rgb": [
+              97,
+              97,
+              92
+            ],
+            "share": 0.3108
+          },
+          "weight": 60
+        },
+        "secondary": {
+          "swatch": {
+            "hex": "#454139",
+            "rank": 1,
+            "rgb": [
+              69,
+              65,
+              57
+            ],
+            "share": 0.2639
+          },
+          "weight": 30
+        }
+      },
+      "swatches": [
+        {
+          "hex": "#61615c",
+          "rank": 0,
+          "rgb": [
+            97,
+            97,
+            92
+          ],
+          "share": 0.3108
+        },
+        {
+          "hex": "#454139",
+          "rank": 1,
+          "rgb": [
+            69,
+            65,
+            57
+          ],
+          "share": 0.2639
+        },
+        {
+          "hex": "#17110c",
+          "rank": 2,
+          "rgb": [
+            23,
+            17,
+            12
+          ],
+          "share": 0.2049
+        },
+        {
+          "hex": "#82959b",
+          "rank": 3,
+          "rgb": [
+            130,
+            149,
+            155
+          ],
+          "share": 0.174
+        },
+        {
+          "hex": "#eceadf",
+          "rank": 4,
+          "rgb": [
+            236,
+            234,
+            223
+          ],
+          "share": 0.0464
+        }
+      ]
+    }
+  },
+  "previewUrl": "/api/previews/preview_20260530123105.png",
+  "regions": {
+    "floor": {
+      "coverage": 0.298,
+      "pixelCount": 55875,
+      "vectorLayerCount": 1
+    },
+    "furniture": {
+      "coverage": 0.159,
+      "pixelCount": 29816,
+      "vectorLayerCount": 3
+    },
+    "lamp": {
+      "coverage": 0.046,
+      "pixelCount": 8619,
+      "vectorLayerCount": 1
+    },
+    "sofa": {
+      "coverage": 0.0819,
+      "pixelCount": 15351,
+      "vectorLayerCount": 1
+    },
+    "table": {
+      "coverage": 0.0312,
+      "pixelCount": 5846,
+      "vectorLayerCount": 1
+    },
+    "wall": {
+      "coverage": 0.58,
+      "pixelCount": 108750,
+      "vectorLayerCount": 1
+    }
+  },
+  "source": {
+    "imageSize": {
+      "height": 500,
+      "width": 375
+    },
+    "imageSource": "data_url",
+    "imageUrl": "/api/uploads/20260530123102_e5da2cae98.png"
+  }
+}

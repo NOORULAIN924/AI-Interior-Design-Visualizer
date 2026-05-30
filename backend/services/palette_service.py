@@ -90,3 +90,39 @@ def suggest_wall_palettes(room_palette: dict[str, Any]) -> list[dict[str, Any]]:
         {"name": "Soft Contrast", "wall": secondary, "trim": "#f8f3ef", "accent": base},
         {"name": "Calm Studio", "wall": "#e8dfd5", "trim": "#f4f1ed", "accent": "#8ea3a0"},
     ]
+
+
+def _hex_to_hsv_tuple(hex_color: str) -> tuple[float, float, float]:
+    import colorsys
+    rgb = hex_to_rgb(hex_color) / 255.0
+    return colorsys.rgb_to_hsv(float(rgb[0]), float(rgb[1]), float(rgb[2]))
+
+
+def _hsv_to_hex(h: float, s: float, v: float) -> str:
+    import colorsys
+    r, g, b = colorsys.hsv_to_rgb(h, s, v)
+    return rgb_to_hex([int(r * 255), int(g * 255), int(b * 255)])
+
+
+def generate_recommendation_palettes(base_hex: str) -> dict[str, list[str]]:
+    """Return Complementary, Analogous, and Triadic palettes (3 colors each) for a base color."""
+    import colorsys
+    # normalize
+    h, s, v = _hex_to_hsv_tuple(base_hex)
+
+    # Complementary: base, complement (h+0.5), and muted tint
+    comp_h = (h + 0.5) % 1.0
+    comp = [_hsv_to_hex(h, s, v), _hsv_to_hex(comp_h, max(0, s * 0.9), min(1.0, v * 0.95)), _hsv_to_hex(h, max(0, s * 0.5), min(1.0, v * 1.05))]
+
+    # Analogous: h +/- 30 degrees (~1/12), and a softer tint
+    delta = 1.0 / 12.0
+    ana1 = (h - delta) % 1.0
+    ana2 = (h + delta) % 1.0
+    analogous = [_hsv_to_hex(ana1, s, v), _hsv_to_hex(h, max(0, s * 0.9), min(1.0, v * 1.02)), _hsv_to_hex(ana2, s, v)]
+
+    # Triadic: h +/- 1/3
+    t1 = (h + 1.0 / 3.0) % 1.0
+    t2 = (h + 2.0 / 3.0) % 1.0
+    triadic = [_hsv_to_hex(h, s, v), _hsv_to_hex(t1, max(0, s * 0.95), v), _hsv_to_hex(t2, max(0, s * 0.95), v)]
+
+    return {"complementary": comp, "analogous": analogous, "triadic": triadic}

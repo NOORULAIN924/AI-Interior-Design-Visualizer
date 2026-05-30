@@ -46,7 +46,7 @@ export default function Landing() {
         </article>
         <article className="feature-card-v2">
           <h3>Furniture Swap UX</h3>
-          <p>Drag catalog pieces onto the scene, preview replacements, and fine-tune scale and rotation.</p>
+          <p>Furniture replacement is a roadmap item. The current build focuses on room upload, segmentation, and color exploration.</p>
         </article>
         <article className="feature-card-v2">
           <h3>Save & Share</h3>

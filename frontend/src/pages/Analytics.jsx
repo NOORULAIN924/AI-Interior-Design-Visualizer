@@ -49,7 +49,8 @@ export default function Analytics() {
               <li>Frontend upload, preview, and comparison flow</li>
               <li>Interactive recolor + palette assisted controls</li>
               <li>Share payload export path</li>
-              <li>Backend segmentation and style-transfer integration pending</li>
+              <li>Production segmentation and style-transfer integration pending</li>
+              <li>Furniture swap UX intentionally deferred until core vision flow is stable</li>
             </ul>
           </article>
         </div>

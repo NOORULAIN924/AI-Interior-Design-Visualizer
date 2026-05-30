@@ -19,7 +19,7 @@ export default function About() {
             <ul>
               <li>Upload a room photo directly in the browser.</li>
               <li>Segment walls, floor, and furniture for precise design edits.</li>
-              <li>Change wall colors, swap furniture styles, and preview the redesign live.</li>
+              <li>Change wall colors and preview the redesign live.</li>
               <li>Compare before and after visuals side-by-side.</li>
               <li>Save or share design payloads for collaboration.</li>
             </ul>
@@ -34,6 +34,14 @@ export default function About() {
               <li>Image operations: OpenCV preprocessing and mask utilities</li>
               <li>Model runtime: PyTorch-based serving</li>
             </ul>
+          </article>
+
+          <article>
+            <h3>Current build stage</h3>
+            <p>
+              The app currently behaves like a structured prototype: upload, palette inference, preview generation,
+              and save/share are wired. Furniture swapping and production-grade segmentation remain roadmap work.
+            </p>
           </article>
 
           <article>

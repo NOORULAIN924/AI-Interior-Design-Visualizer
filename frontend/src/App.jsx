@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import Landing from './pages/Landing'
@@ -7,7 +7,7 @@ import Results from './pages/Results'
 import About from './pages/About'
 import Analytics from './pages/Analytics'
 
-export default function App(){
+export default function App() {
   // shared state for dashboard/results preview
   const [beforeImage, setBeforeImage] = useState(null)
   const [palette, setPalette] = useState([])
@@ -26,7 +26,7 @@ export default function App(){
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/dashboard" element={<Dashboard beforeImage={beforeImage} setBeforeImage={setBeforeImage} palette={palette} setPalette={setPalette} targetColor={targetColor} setTargetColor={setTargetColor} designOptions={designOptions} setDesignOptions={setDesignOptions} />} />
-            <Route path="/results" element={<Results beforeImage={beforeImage} targetColor={targetColor} designOptions={designOptions} />} />
+            <Route path="/results" element={<Results beforeImage={beforeImage} palette={palette} targetColor={targetColor} setTargetColor={setTargetColor} designOptions={designOptions} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/about" element={<About />} />
           </Routes>

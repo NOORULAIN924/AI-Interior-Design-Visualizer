@@ -15,3 +15,5 @@ env/
 # Byte-compiled / cache
 __pycache__/
 *.pyc
+node_modules/
+backend/uploads/

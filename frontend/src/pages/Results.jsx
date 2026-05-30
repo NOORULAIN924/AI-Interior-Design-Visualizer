@@ -210,6 +210,25 @@ export default function Results({ uiConfig, socket, clientId, beforeImage, palet
           </div>
         </div>
 
+        <div className="results-preview-v2">
+          <div className="results-preview-head-v2">
+            <h3>AI preview</h3>
+            <span>{loading ? 'Generating...' : 'Ready to edit'}</span>
+          </div>
+          <div className="results-preview-grid-v2">
+            <div className="results-preview-pane-v2">
+              <div className="results-preview-label-v2">Before</div>
+              {beforeImage ? <img src={beforeImage} alt="Original room" /> : <div className="img-empty-v2">Upload an image in Dashboard</div>}
+            </div>
+            <div className="results-preview-pane-v2 after">
+              <div className="results-preview-label-v2">After</div>
+              {loading && <div className="img-empty-v2">Generating redesign preview...</div>}
+              {!loading && previewUrl && !previewFailed && <img src={previewUrl} alt="AI generated redesign preview" />}
+              {!loading && (!previewUrl || previewFailed) && <div className="img-empty-v2">Waiting for preview</div>}
+            </div>
+          </div>
+        </div>
+
         <div className="results-grid-v2">
           <div className="result-pane-v2 before-pane-v2">
             <h3>Before · uploaded photo</h3>
@@ -227,7 +246,7 @@ export default function Results({ uiConfig, socket, clientId, beforeImage, palet
             </div>
           </div>
           <div className="result-pane-v2">
-            <h3>After · AI-generated preview</h3>
+            <h3>Fine-tune in canvas</h3>
             {loading && <div className="img-empty-v2">Generating redesign preview...</div>}
             {!loading && (
               <>

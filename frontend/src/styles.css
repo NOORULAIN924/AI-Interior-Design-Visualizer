@@ -293,6 +293,15 @@ body{background:#060709;color:#eef2f8;font-family:"Segoe UI", "Inter", Arial, sa
 .result-note-v2{margin:0 0 10px;color:#9ca9bc;font-size:13px}
 .results-editors-v2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
 .palette-rail-v2{margin:12px 0 14px;padding:12px 14px;background:#10151e;border:1px solid rgba(255,255,255,0.08);border-radius:12px}
+.results-preview-v2{margin:12px 0 14px;padding:12px 14px;background:#10151e;border:1px solid rgba(255,255,255,0.08);border-radius:12px}
+.results-preview-head-v2{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.results-preview-head-v2 h3{margin:0;font-size:18px}
+.results-preview-head-v2 span{font-size:13px;color:#9ca9bc}
+.results-preview-grid-v2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.results-preview-pane-v2{position:relative;min-height:240px;border-radius:10px;overflow:hidden;background:#0d1118;border:1px solid rgba(255,255,255,0.08)}
+.results-preview-pane-v2 img{width:100%;height:100%;min-height:240px;object-fit:cover;display:block}
+.results-preview-pane-v2.after img{filter:saturate(1.05) contrast(1.04) brightness(1.01)}
+.results-preview-label-v2{position:absolute;left:10px;top:10px;z-index:2;background:rgba(0,0,0,0.55);color:#fff;font-size:12px;padding:4px 9px;border-radius:999px}
 
 .about-grid-v2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .about-grid-v2 article{background:#10151f;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px}
@@ -314,7 +323,7 @@ body{background:#060709;color:#eef2f8;font-family:"Segoe UI", "Inter", Arial, sa
 	.hero-v2{grid-template-columns:1fr}
 	.feature-grid-v2{grid-template-columns:repeat(2,minmax(0,1fr))}
 	.steps-v2{grid-template-columns:repeat(2,minmax(0,1fr))}
-	.results-grid-v2,.results-editors-v2,.about-grid-v2,.analytics-grid-v2{grid-template-columns:1fr}
+	.results-grid-v2,.results-editors-v2,.about-grid-v2,.analytics-grid-v2,.results-preview-grid-v2{grid-template-columns:1fr}
 }
 @media (max-width: 700px){
 	.page-container{padding:10px}

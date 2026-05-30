@@ -66,26 +66,12 @@ export default function Dashboard({ uiConfig, beforeImage, setBeforeImage, palet
     reader.readAsDataURL(file)
   }
 
-  function handleGenerate() {
-    if (!beforeImage) {
-      alert('Upload a room photo first to generate a redesign preview.')
-      return
-    }
-
-    setDesignOptions && setDesignOptions({
-      designTheme,
-      roomType,
-      generatedAt: Date.now()
-    })
-    navigate('/results')
-  }
-
   return (
     <div className="page page-v2">
       <section className="dash-main-v2">
         <div className="dash-top-card-v2">
           <h3>Upload a room photo and the app will open Results automatically with a generated redesign preview</h3>
-          <p className="result-note-v2">Your uploaded photo is the source image for segmentation, palette extraction, and the AI redesign preview.</p>
+          <p className="result-note-v2">Your uploaded photo becomes the source image for segmentation, palette extraction, wall recoloring, and furniture swaps. No manual Generate click needed.</p>
 
           <div className="dash-row-v2">
             <label className="dash-field-v2">
@@ -109,7 +95,7 @@ export default function Dashboard({ uiConfig, beforeImage, setBeforeImage, palet
           <div className="dash-actions-v2">
             <label className="upload-btn-v2" htmlFor="room-upload">Upload Photo</label>
             <input id="room-upload" type="file" accept="image/*" onChange={handleUpload} hidden />
-            <button className="generate-btn-v2" type="button" onClick={handleGenerate}>Generate Design</button>
+            <span className="result-note-v2">Auto-generates on upload</span>
           </div>
 
           {palette && palette.length > 0 && (

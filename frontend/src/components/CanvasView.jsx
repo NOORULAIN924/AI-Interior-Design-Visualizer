@@ -550,46 +550,55 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
     const fabricLib = fabricLibRef.current
     if (!c || !fabricLib || !item) return
 
-    const left = dropX - 48
-    const top = dropY - 28
+    const canvasW = c.getWidth() || 640
+    const tokenW = Math.max(64, Math.round(canvasW * 0.14))
+    const tokenH = Math.max(40, Math.round(tokenW * 0.6))
+    const left = Math.max(8, dropX - tokenW / 2)
+    const top = Math.max(8, dropY - tokenH / 2)
     const fill = item.previewColor || '#7b6d62'
     const label = item.label || item.name || item.category || 'Furniture'
-    const rect = new fabricLib.Rect({
-      left,
-      top,
-      width: 96,
-      height: 56,
-      rx: 10,
-      ry: 10,
-      fill,
-      opacity: 0.86,
-      stroke: '#ffffff',
-      strokeWidth: 1,
-      selectable: true,
-      hasControls: true,
-      hasBorders: true,
-      cornerStyle: 'circle'
-    })
-    const text = new fabricLib.Textbox(label, {
-      left: left + 8,
-      top: top + 18,
-      width: 80,
-      fontSize: 10,
-      fill: '#ffffff',
-      fontFamily: 'Segoe UI',
-      textAlign: 'center',
-      selectable: false,
-      evented: false
-    })
-    const group = new fabricLib.Group([rect, text], {
-      left,
-      top,
-      selectable: true,
-      hasControls: true,
-      hasBorders: true
-    })
+
+    // Prefer real image if provided
+    if (item.image) {
+      fabricLib.Image.fromURL(item.image, (img) => {
+        const scale = Math.min(1.0, tokenW / (img.width || tokenW))
+        img.set({ left, top, scaleX: scale, scaleY: scale, selectable: true, originX: 'left', originY: 'top' })
+        img.set('shadow', new fabricLib.Shadow({ color: 'rgba(0,0,0,0.45)', blur: 14, offsetX: 0, offsetY: 8 }))
+        img.metadataType = 'furnitureToken'
+        img.furnitureLabel = label
+        c.add(img)
+        c.setActiveObject(img)
+        c.requestRenderAll()
+      }, { crossOrigin: 'anonymous' })
+      setDropHint(`Placed: ${label}`)
+      setTimeout(() => setDropHint('Drag a catalog item here to place it on the canvas'), 1800)
+      return
+    }
+
+    // create mock furniture token with gradient and highlight
+    const baseRect = new fabricLib.Rect({ left: 0, top: 0, width: tokenW, height: tokenH, rx: Math.round(tokenH * 0.12), ry: Math.round(tokenH * 0.12), selectable: false, originX: 'left', originY: 'top' })
+    const light = hexShade(fill, 0.12)
+    const dark = hexShade(fill, -0.08)
+    try {
+      const grad = new fabricLib.Gradient({ type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: tokenH }, colorStops: [{ offset: 0, color: light }, { offset: 0.6, color: fill }, { offset: 1, color: dark }] })
+      baseRect.set('fill', grad)
+    } catch (e) {
+      baseRect.set('fill', fill)
+    }
+    baseRect.set('shadow', new fabricLib.Shadow({ color: 'rgba(0,0,0,0.45)', blur: 14, offsetX: 0, offsetY: 8 }))
+
+    const highlight = new fabricLib.Rect({ left: Math.round(tokenW * 0.06), top: Math.round(tokenH * 0.06), width: Math.round(tokenW * 0.5), height: Math.round(tokenH * 0.22), rx: Math.round(tokenH * 0.08), ry: Math.round(tokenH * 0.08), fill: 'rgba(255,255,255,0.12)', selectable: false, evented: false, originX: 'left', originY: 'top' })
+    const text = new fabricLib.Text(label, { left: Math.round(tokenW * 0.06), top: tokenH - 18, fontSize: 11, fill: 'rgba(255,255,255,0.92)', selectable: false, evented: false })
+
+    const group = new fabricLib.Group([baseRect, highlight, text], { left, top, selectable: true, hasControls: true, hasBorders: true, originX: 'left', originY: 'top' })
+    // depth scale and small angle to mimic perspective
+    const depthFactor = Math.min(1.25, 0.85 + (dropY / Math.max(1, c.getHeight())))
+    group.scaleX = depthFactor
+    group.scaleY = depthFactor
+    group.set('angle', Math.max(-6, Math.min(6, (dropX / Math.max(1, c.getWidth()) - 0.5) * 10)))
     group.metadataType = 'furnitureToken'
     group.furnitureLabel = label
+
     c.add(group)
     c.setActiveObject(group)
     c.requestRenderAll()
@@ -655,6 +664,23 @@ export default function CanvasView({ image, targetColor: propTargetColor, setTar
     } catch (err) {
       console.warn(err)
       alert('AI recolor failed — check backend logs')
+    }
+  }
+
+  // simple hex shade helper: percent positive -> lighten, negative -> darken
+  function hexShade(hex, percent) {
+    try {
+      hex = String(hex || '#000000').replace('#', '')
+      const num = parseInt(hex, 16)
+      let r = (num >> 16) + Math.round(255 * percent)
+      let g = ((num >> 8) & 0x00FF) + Math.round(255 * percent)
+      let b = (num & 0x0000FF) + Math.round(255 * percent)
+      r = Math.max(0, Math.min(255, r))
+      g = Math.max(0, Math.min(255, g))
+      b = Math.max(0, Math.min(255, b))
+      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
+    } catch (e) {
+      return hex
     }
   }
 
